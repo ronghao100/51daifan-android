@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="D:\workspaces\51daifan-android\daifanProject\daifan\src\main\assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="D:\workspaces\51daifan-android\daifanProject\daifan\src\debug\assets" />
+    </dataSet>
+
+</merger>
