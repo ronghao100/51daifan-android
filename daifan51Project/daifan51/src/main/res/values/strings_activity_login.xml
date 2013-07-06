@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">密码</string>
+
+    <string name="action_sign_in_register"><b>登录</b>/注册</string>
+    <string name="action_sign_in_short">登录</string>
+
+    <string name="login_progress_signing_in">登录中...</string>
+
+    <string name="error_invalid_email">邮件地址不正确</string>
+    <string name="error_invalid_password">密码太短</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">必填项</string>
+    <string name="login">登录</string>
+    <string name="account">账号:</string>
+    <string name="password">密码:</string>
+    <string name="register_link">没有账号？马上注册</string>
+</resources>
