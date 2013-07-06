@@ -2,6 +2,7 @@ package com.daifan.activity.lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,33 +70,43 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
         }
     }
 
-    public void setBackToTopView(ImageView mTopImageView){
+    public void setBackToTopView(ImageView mTopImageView) {
         this.mTopImageView = mTopImageView;
         mTopImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (refreshableView instanceof ListView ) {
-                    ((ListView)refreshableView).setSelection(0);
-                }else if(refreshableView instanceof GridView){
-                    ((GridView)refreshableView).setSelection(0);
+                if (refreshableView instanceof ListView) {
+                    ((ListView) refreshableView).setSelection(0);
+                } else if (refreshableView instanceof GridView) {
+                    ((GridView) refreshableView).setSelection(0);
                 }
             }
         });
     }
 
+    @Override
+    protected void gotoLatestListItem(boolean hasNewData) {
+        if (hasNewData) {
+            if (refreshableView instanceof ListView) {
+                ((ListView) refreshableView).setSelection(refreshableView.getFirstVisiblePosition() + 1);
+            } else if (refreshableView instanceof GridView) {
+                ((GridView) refreshableView).setSelection(refreshableView.getFirstVisiblePosition() + 1);
+            }
+        }
+    }
+
     /**
      * Sets the Empty View to be used by the Adapter View.
-     *
+     * <p/>
      * We need it handle it ourselves so that we can Pull-to-Refresh when the
      * Empty View is shown.
-     *
+     * <p/>
      * Please note, you do <strong>not</strong> usually need to call this method
      * yourself. Calling setEmptyView on the AdapterView will automatically call
      * this method and set everything up. This includes when the Android
      * Framework automatically sets the Empty View based on it's ID.
      *
-     * @param newEmptyView
-     *            - Empty View to be used
+     * @param newEmptyView - Empty View to be used
      */
     public final void setEmptyView(View newEmptyView) {
         // If we already have an Empty View, remove it
@@ -133,7 +144,9 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
         refreshableViewHolder.addView(refreshableView, ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
         addView(refreshableViewHolder, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 0, 1.0f));
-    };
+    }
+
+    ;
 
     protected boolean isReadyForPullDown() {
         return isFirstItemVisible();

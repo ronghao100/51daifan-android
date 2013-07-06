@@ -34,12 +34,12 @@ public class UserService {
         return null;
     }
 
-    public boolean isLoggedIn(Context context) {
+    public boolean isLoggedIn() {
         int count = userDao.getRowCount();
         return count > 0;
     }
 
-    public boolean logout(Context context) {
+    public boolean logout() {
         userDao.resetTables();
         return true;
     }

@@ -5,9 +5,9 @@ package com.daifan.domain;
  */
 public class Post {
 
-    private String id;
+    private int id;
     private String userName;
-    private String userId;
+    private int userId;
     private String thumbnailUrl;
     private String desc;
     private String createdAt;
@@ -16,7 +16,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(String id, String userName, String userId, String thumbnailUrl, String desc, String createdAt, String address) {
+    public Post(int id, String userName, int userId, String thumbnailUrl, String desc, String createdAt, String address) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
@@ -26,13 +26,6 @@ public class Post {
         this.address = address;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
@@ -42,11 +35,19 @@ public class Post {
         this.userName = userName;
     }
 
-    public String getUserId() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

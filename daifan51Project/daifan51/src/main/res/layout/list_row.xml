@@ -10,7 +10,8 @@
             android:layout_height="50dp"
             android:id="@+id/thumbnail"
             android:layout_gravity="center_horizontal|top"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_launcher"
+            android:layout_marginTop="10dp"/>
 
     <LinearLayout
             android:orientation="vertical"

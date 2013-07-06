@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidConfiguredLogFilters">
+    <filters>
+      <filter>
+        <option name="logMessagePattern" value="" />
+        <option name="logTagPattern" value="51daifan" />
+        <option name="name" value="daifan" />
+        <option name="packageNamePattern" value="" />
+        <option name="pid" value="" />
+      </filter>
+    </filters>
+  </component>
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
       <GlobalState>
@@ -13,7 +24,8 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="ERROR" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="daifan" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" name="Default" comment="" />
@@ -21,11 +33,22 @@
     <ignored path=".idea/workspace.xml" />
     <file path="$PROJECT_DIR$/../51daifanProject/settings.gradle" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373095009950" ignored="false" />
     <file path="/settings.gradle" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373095007204" ignored="false" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373096363215" ignored="false" />
+    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373104186796" ignored="false" />
     <file path="$USER_HOME$/AppData/Local/Temp/android_manifest_copy8890383991603780004tmp/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373095407299" ignored="false" />
     <file path="$PROJECT_DIR$/.idea/misc.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373095538456" ignored="false" />
-    <file path="/fragment.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373095547238" ignored="false" />
+    <file path="/fragment.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373122374355" ignored="false" />
     <file path="$USER_HOME$/AppData/Local/Temp/android_manifest_copy2739723432846611061tmp/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373096295616" ignored="false" />
+    <file path="/PostListActivity.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373124903231" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373097631488" ignored="false" />
+    <file path="$USER_HOME$/AppData/Local/Temp/android_manifest_copy1178646721673121437tmp/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373097658777" ignored="false" />
+    <file path="/LoginActivity.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373097814824" ignored="false" />
+    <file path="/Dummy.txt" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373100127418" ignored="false" />
+    <file path="$USER_HOME$/AppData/Local/Temp/android_manifest_copy4638666598034929472tmp/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373100341095" ignored="false" />
+    <file path="/PullToRefreshBase.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373124974180" ignored="false" />
+    <file path="/Post.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373122410725" ignored="false" />
+    <file path="/PostService.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373122582093" ignored="false" />
+    <file path="$USER_HOME$/AppData/Local/Temp/android_manifest_copy5806381155475090023tmp/AndroidManifest.xml" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373122736900" ignored="false" />
+    <file path="/PullToRefreshAdapterViewBase.java" changelist="ca8d6144-50e4-42ea-8d98-6d1b93cd9d34" time="1373125025454" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +66,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -79,7 +103,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -88,7 +111,82 @@
     <favorites_list name="daifan51" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="PostListActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/PostListActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="133" column="48" selection-start="4923" selection-end="4923" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#883#889#0" expanded="true" />
+                <element signature="e#3969#3975#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Post.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/domain/Post.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="37" column="24" selection-start="832" selection-end="832" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PullToRefreshBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="224" column="43" selection-start="7063" selection-end="7063" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#17364#17418#0" expanded="true" />
+                <element signature="e#17453#17513#0" expanded="true" />
+                <element signature="e#17545#17602#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PostService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/PostService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="19" selection-start="793" selection-end="793" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list_row.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/layout/list_row.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PullToRefreshAdapterViewBase.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshAdapterViewBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="94" column="9" selection-start="3551" selection-end="3551" vertical-scroll-proportion="0.84196186">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PullToRefreshListView.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshListView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -98,15 +196,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/settings.gradle" />
-        <option value="$PROJECT_DIR$/daifan51/build.gradle" />
         <option value="$PROJECT_DIR$/.idea/libraries/android_support_v4.xml" />
         <option value="$PROJECT_DIR$/libraries/actionbarsherlock/actionbarsherlock.iml" />
         <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshListView.java" />
         <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/dao/UserDao.java" />
-        <option value="$PROJECT_DIR$/daifan51/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/daifan51/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/daifan51/src/main/res/values/attrs.xml" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/UserService.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/RegisterActivity.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/domain/Post.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/res/layout/list_row.xml" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/PostService.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/PostListActivity.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshBase.java" />
+        <option value="$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshAdapterViewBase.java" />
       </list>
     </option>
   </component>
@@ -127,7 +232,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="2" />
+    <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
@@ -593,6 +698,7 @@
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="project.structure.last.edited" value="SDKs" />
+    <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
@@ -601,13 +707,15 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/libraries/actionbarsherlock" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="0123456789ABCDEF" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="AVD_for_Nexus_4_by_Google" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -734,19 +842,22 @@
       <created>1373094641004</created>
       <updated>1373094641004</updated>
       <workItem from="1373094664706" duration="627000" />
-      <workItem from="1373095342207" duration="1035000" />
+      <workItem from="1373095342207" duration="9794000" />
+      <workItem from="1373120638467" duration="3999000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1662000" />
+    <option name="totallyTimeSpent" value="14420000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -759,8 +870,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31439394" sideWeight="0.67064846" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31439394" sideWeight="0.67064846" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32935154" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -768,6 +879,30 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.8105802" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31439394" sideWeight="0.67064846" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32935154" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -830,55 +965,116 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/android_support_v4.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="47" selection-start="131" selection-end="131" vertical-scroll-proportion="0.10714286">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/dao/UserDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="13" selection-start="312" selection-end="312" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/domain/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="100" selection-end="100" vertical-scroll-proportion="0.14285715">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/LoginActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="38" selection-start="569" selection-end="569" vertical-scroll-proportion="0.0">
+        <state line="196" column="16" selection-start="7119" selection-end="7328" vertical-scroll-proportion="0.39285713">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/UserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="26" selection-start="981" selection-end="981" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/actionbarsherlock/src/com/actionbarsherlock/app/SherlockListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="225" column="0" selection-start="6951" selection-end="6951" vertical-scroll-proportion="0.8080439">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/daifan51/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="0" selection-start="1170" selection-end="1170" vertical-scroll-proportion="1.1785715">
+        <state line="39" column="79" selection-start="1523" selection-end="1523" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#439#457#0" expanded="true" />
-            <element signature="e#606#624#0" expanded="true" />
+            <element signature="e#609#627#0" expanded="true" />
             <element signature="e#1026#1044#0" expanded="true" />
+            <element signature="e#1245#1263#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/layout/activity_login.xml">
+    <entry file="file://$PROJECT_DIR$/libraries/actionbarsherlock/src/com/actionbarsherlock/view/MenuItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="27" selection-start="4732" selection-end="4732" vertical-scroll-proportion="-12.453571">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/widget/AbsListView.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="292" column="44" selection-start="12420" selection-end="12436" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/view/MotionEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="30" selection-start="161" selection-end="172" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/os/AsyncTask.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="31" selection-start="162" selection-end="171" vertical-scroll-proportion="0.14990859" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/domain/Post.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="24" selection-start="832" selection-end="832" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-17/android.jar!/android/widget/ListView.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="16" selection-start="2183" selection-end="2183" vertical-scroll-proportion="0.33214286">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/PostListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="133" column="48" selection-start="4923" selection-end="4923" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#883#889#0" expanded="true" />
+            <element signature="e#3969#3975#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="224" column="43" selection-start="7063" selection-end="7063" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#17364#17418#0" expanded="true" />
+            <element signature="e#17453#17513#0" expanded="true" />
+            <element signature="e#17545#17602#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/service/PostService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="19" selection-start="793" selection-end="793" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/layout/list_row.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
@@ -888,65 +1084,9 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/values/pull_refresh_strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="12" selection-start="957" selection-end="957" vertical-scroll-proportion="0.9285714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/internal/LoadingLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="13" selection-start="571" selection-end="571" vertical-scroll-proportion="0.2259887">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/adapter/PostAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="30" selection-start="534" selection-end="534" vertical-scroll-proportion="0.49046323">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/internal/EmptyViewMethodAccessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="17" selection-start="210" selection-end="210" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshAdapterViewBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="22" selection-start="583" selection-end="583" vertical-scroll-proportion="0.056497175">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshListView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.054495912">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/res/values/attrs.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="12" selection-start="531" selection-end="531" vertical-scroll-proportion="0.7629428">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/daifan51/src/main/java/com/daifan/activity/lib/PullToRefreshBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="484" column="14" selection-start="15118" selection-end="15118" vertical-scroll-proportion="0.62711865">
+        <state line="94" column="9" selection-start="3551" selection-end="3551" vertical-scroll-proportion="0.84196186">
           <folding />
         </state>
       </provider>

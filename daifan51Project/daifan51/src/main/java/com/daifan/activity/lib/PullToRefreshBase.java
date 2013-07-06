@@ -74,7 +74,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
             this.continueRunning = false;
             this.handler.removeCallbacks(this);
         }
-    };
+    }
 
     // ===========================================================
     // Constants
@@ -86,6 +86,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     static final int RELEASE_TO_REFRESH = 0x1;
     static final int REFRESHING = 0x2;
     static final int MANUAL_REFRESHING = 0x3;
+
+    public static final int REFRESHING_TOP = 0x0;
+    public static final int REFRESHING_DOWN = 0x1;
 
     public static final int MODE_PULL_DOWN_TO_REFRESH = 0x1;
     public static final int MODE_PULL_UP_TO_REFRESH = 0x2;
@@ -105,6 +108,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     private int state = PULL_TO_REFRESH;
     private int mode = MODE_BOTH;
     private int currentMode;
+
+    //pull down or pull up
+    private int refreshMode = REFRESHING_TOP;
 
     private boolean disableScrollingWhileRefreshing = true;
 
@@ -148,8 +154,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * Deprecated. Use {@link #getRefreshableView()} from now on.
      *
-     * @deprecated
      * @return The Refreshable View which is currently wrapped
+     * @deprecated
      */
     public final T getAdapterView() {
         return refreshableView;
@@ -177,7 +183,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * Returns whether the widget has disabled scrolling on the Refreshable View
      * while refreshing.
-     *
      */
     public final boolean isDisableScrollingWhileRefreshing() {
         return disableScrollingWhileRefreshing;
@@ -197,7 +202,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
      * refreshing. This method can change this behaviour.
      *
      * @param disableScrollingWhileRefreshing
-     *            - true if you want to disable scrolling while refreshing
+     *         - true if you want to disable scrolling while refreshing
      */
     public final void setDisableScrollingWhileRefreshing(boolean disableScrollingWhileRefreshing) {
         this.disableScrollingWhileRefreshing = disableScrollingWhileRefreshing;
@@ -206,18 +211,23 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * Mark the current Refresh as complete. Will Reset the UI and hide the
      * Refreshing View
+     * @param hasNewData
      */
-    public final void onRefreshComplete() {
+    public final void onRefreshComplete(boolean hasNewData) {
         if (state != PULL_TO_REFRESH) {
             resetHeader();
+            if (refreshMode == REFRESHING_DOWN) {
+                gotoLatestListItem(hasNewData);
+            }
         }
     }
+
+    protected abstract void gotoLatestListItem(boolean hasNewData);
 
     /**
      * Set OnRefreshListener for the Widget
      *
-     * @param listener
-     *            - Listener to be used when the Widget is set to Refresh
+     * @param listener - Listener to be used when the Widget is set to Refresh
      */
     public final void setOnRefreshListener(OnRefreshListener listener) {
         onRefreshListener = listener;
@@ -226,8 +236,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * A mutator to enable/disable Pull-to-Refresh for the current View
      *
-     * @param enable
-     *            Whether Pull-To-Refresh should be used
+     * @param enable Whether Pull-To-Refresh should be used
      */
     public final void setPullToRefreshEnabled(boolean enable) {
         this.isPullToRefreshEnabled = enable;
@@ -237,8 +246,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
      * Set Text to show when the Widget is being pulled, and will refresh when
      * released
      *
-     * @param releaseLabel
-     *            - String to display
+     * @param releaseLabel - String to display
      */
     public void setReleaseLabel(String releaseLabel) {
         if (null != headerLayout) {
@@ -252,8 +260,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * Set Text to show when the Widget is being Pulled
      *
-     * @param pullLabel
-     *            - String to display
+     * @param pullLabel - String to display
      */
     public void setPullLabel(String pullLabel) {
         if (null != headerLayout) {
@@ -267,8 +274,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     /**
      * Set Text to show when the Widget is refreshing
      *
-     * @param refreshingLabel
-     *            - String to display
+     * @param refreshingLabel - String to display
      */
     public void setRefreshingLabel(String refreshingLabel) {
         if (null != headerLayout) {
@@ -287,8 +293,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
      * Sets the Widget to be in the refresh state. The UI will be updated to
      * show the 'Refreshing' view.
      *
-     * @param doScroll
-     *            - true if you want to force a scroll to the Refreshing view.
+     * @param doScroll - true if you want to force a scroll to the Refreshing view.
      */
     public final void setRefreshing(boolean doScroll) {
         if (!isRefreshing()) {
@@ -345,7 +350,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 
                     if (state == RELEASE_TO_REFRESH && null != onRefreshListener) {
                         setRefreshingInternal(true);
-                        onRefreshListener.onRefresh();
+                        onRefreshListener.onRefresh(refreshMode);
                     } else {
                         smoothScrollTo(0);
                     }
@@ -430,15 +435,14 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
      * This is implemented by derived classes to return the created View. If you
      * need to use a custom View (such as a custom ListView), override this
      * method and return an instance of your custom class.
-     *
+     * <p/>
      * Be sure to set the ID of the view in this method, especially if you're
      * using a ListActivity or ListFragment.
      *
      * @param context
-     * @param attrs
-     *            AttributeSet from wrapped class. Means that anything you
-     *            include in the XML layout declaration will be routed to the
-     *            created View
+     * @param attrs   AttributeSet from wrapped class. Means that anything you
+     *                include in the XML layout declaration will be routed to the
+     *                created View
      * @return New instance of the Refreshable View
      */
     protected abstract T createRefreshableView(Context context, AttributeSet attrs);
@@ -685,6 +689,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     }
 
     private boolean isReadyForPull() {
+        if (isReadyForPullDown()) {
+            refreshMode = REFRESHING_TOP;
+        }
+        if (isReadyForPullUp()) {
+            refreshMode = REFRESHING_DOWN;
+        }
         switch (mode) {
             case MODE_PULL_DOWN_TO_REFRESH:
                 return isReadyForPullDown();
@@ -702,7 +712,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 
     public static interface OnRefreshListener {
 
-        public void onRefresh();
+        public void onRefresh(int refreshMode);
 
     }
 
