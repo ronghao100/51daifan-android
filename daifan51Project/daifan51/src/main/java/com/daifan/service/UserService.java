@@ -1,9 +1,25 @@
 package com.daifan.service;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.daifan.R;
 import com.daifan.dao.UserDao;
 import com.daifan.domain.User;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 浩 on 13-7-5.
@@ -17,6 +33,28 @@ public class UserService {
     }
 
     public User login(String email, String password) {
+//        final String url = "http://51daifan.sinaapp.com/api/login";
+//        HttpHeaders requestHeaders = new HttpHeaders();
+//        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+//        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+//        requestHeaders.setAccept(acceptableMediaTypes);
+//
+//        Map<String,String> params=new HashMap<String,String>();
+//        params.put("email",email);
+//        params.put("password",password);
+//
+//        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+//        RestTemplate restTemplate = new RestTemplate();
+//        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
+//
+//        ResponseEntity<LoginResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
+//                LoginResult.class,params);
+//
+//        Log.d("51daifan", "LoginResult:" + responseEntity.getBody());
+//
+//
+//        return responseEntity.getBody().getUser();
+
         if(email.equals("rh@qq.com")){
             User user = new User("1", "michaelrong", email, "2013-6-21");
             userDao.addUser(user);

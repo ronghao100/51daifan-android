@@ -61,7 +61,7 @@ public class PostAdapter extends BaseAdapter {
 
         // Setting all values in listview
         title.setText(post.getUserName());
-        desc.setText(post.getDesc());
+        desc.setText(post.getName()+" "+post.getDesc());
         imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
         return vi;
     }

@@ -1,12 +1,18 @@
 package com.daifan.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by 浩 on 13-7-5.
  */
 public class User {
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("createdAt")
     private String createdAt;
 
     public User() {
@@ -49,5 +55,15 @@ public class User {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
     }
 }
