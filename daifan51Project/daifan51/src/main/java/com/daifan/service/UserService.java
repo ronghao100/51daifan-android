@@ -32,6 +32,16 @@ public class UserService {
         userDao=new UserDao(context);
     }
 
+    public User getCurrUser() {
+        if (isLoggedIn()) {
+            User u = userDao.getUser();
+            if (u.getId() != null && !u.getId().equals(""))
+                return u;
+        }
+
+        return null;
+    }
+
     public User login(String email, String password) {
 //        final String url = "http://51daifan.sinaapp.com/api/login";
 //        HttpHeaders requestHeaders = new HttpHeaders();
