@@ -1,5 +1,8 @@
 package com.daifan.service;
 
+import android.util.Log;
+
+import com.daifan.MainActivity;
 import com.daifan.domain.Post;
 
 import java.util.ArrayList;
@@ -45,5 +48,12 @@ public class PostService {
             posts.add(post);
         }
         return posts;
+    }
+
+    public boolean postNew(String countStr, String eatDateStr, String nameStr, String descStr, String currUid) {
+        Log.d(MainActivity.DAIFAN_TAG, String.format("postNew count=%s, eatDate=%s, name=%s, desc=%s, uid=%s"
+                , countStr, eatDateStr, nameStr, descStr, currUid));
+
+        return true;
     }
 }

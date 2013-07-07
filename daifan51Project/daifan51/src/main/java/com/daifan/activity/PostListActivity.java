@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.daifan.MainActivity;
 import com.daifan.R;
 import com.daifan.activity.adapter.PostAdapter;
 import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
@@ -75,8 +76,11 @@ public class PostListActivity extends SherlockListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
+        postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         menu.add("Create")
                 .setIcon(R.drawable.ic_compose_inverse)
+                .setIntent(postNew)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         menu.add("退出")
@@ -87,12 +91,17 @@ public class PostListActivity extends SherlockListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("51daifan", "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
+        Log.d(MainActivity.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
         if (item.getTitle().equals("退出")) {
             userService.logout();
             Intent login = new Intent(getApplicationContext(), LoginActivity.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(login);
+            finish();
+        } else if (item.getTitle().equals("Create")) {
+            Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
+            postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(postNew);
             finish();
         }
         return true;

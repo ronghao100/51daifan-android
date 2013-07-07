@@ -16,6 +16,16 @@ public class UserService {
         userDao=new UserDao(context);
     }
 
+    public User getCurrUser() {
+        if (isLoggedIn()) {
+            User u = userDao.getUser();
+            if (u.getId() != null && !u.getId().equals(""))
+                return u;
+        }
+
+        return null;
+    }
+
     public User login(String email, String password) {
         if(email.equals("rh@qq.com")){
             User user = new User("1", "michaelrong", email, "2013-6-21");
