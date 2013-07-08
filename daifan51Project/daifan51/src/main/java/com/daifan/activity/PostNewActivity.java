@@ -151,6 +151,23 @@ public class PostNewActivity extends SherlockActivity {
         return getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.ECLAIR
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        return;
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.

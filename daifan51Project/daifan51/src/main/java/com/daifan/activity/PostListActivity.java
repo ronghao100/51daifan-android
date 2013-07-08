@@ -35,6 +35,7 @@ public class PostListActivity extends SherlockListActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
         userService = new UserService(getApplicationContext());
@@ -101,8 +102,7 @@ public class PostListActivity extends SherlockListActivity {
         } else if (item.getTitle().equals("Create")) {
             Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
             postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(postNew);
-            finish();
+            startActivityForResult(postNew, 0);
         }
         return true;
     }
