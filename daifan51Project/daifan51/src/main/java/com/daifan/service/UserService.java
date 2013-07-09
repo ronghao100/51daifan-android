@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.daifan.R;
 import com.daifan.dao.UserDao;
+import com.daifan.domain.LoginResult;
 import com.daifan.domain.User;
 
 import org.springframework.http.HttpEntity;
@@ -43,33 +44,29 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-//        final String url = "http://51daifan.sinaapp.com/api/login";
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-//        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-//        requestHeaders.setAccept(acceptableMediaTypes);
-//
-//        Map<String,String> params=new HashMap<String,String>();
-//        params.put("email",email);
-//        params.put("password",password);
-//
-//        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-//        RestTemplate restTemplate = new RestTemplate();
-//        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
-//
-//        ResponseEntity<LoginResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-//                LoginResult.class,params);
-//
-//        Log.d("51daifan", "LoginResult:" + responseEntity.getBody());
-//
-//
-//        return responseEntity.getBody().getUser();
+        final String url = String.format("http://51daifan.sinaapp.com/api/login?email=%s&password=%s",email.trim(),password);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        requestHeaders.setAccept(acceptableMediaTypes);
 
-        if(email.equals("rh@qq.com")){
-            User user = new User("1", "michaelrong", email, "2013-6-21");
-            userDao.addUser(user);
-            return user;
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
+
+        ResponseEntity<LoginResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
+                LoginResult.class);
+
+        Log.d("51daifan", "LoginResult:" + responseEntity.getBody());
+
+        User u = responseEntity.getBody().getUser();
+        if(responseEntity.getBody().getSuccess() == 1
+                && u != null
+                && email.trim().equals(u.getEmail())){
+            userDao.addUser(u);
+            return u;
         }
+
         return null;
     }
 
