@@ -17,6 +17,9 @@ import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 import com.daifan.service.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Activity which post new recipes.
  */
@@ -61,6 +64,8 @@ public class PostNewActivity extends SherlockActivity {
         eatDateTxt = (EditText) findViewById(R.id.postnew_eatdate);
         descTxt = (EditText) findViewById(R.id.postnew_desc);
         nameTxt = (EditText) findViewById(R.id.postnew_name);
+
+        eatDateTxt.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()+24 * 3600*1000)));
 
         descTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

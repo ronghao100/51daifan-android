@@ -3,6 +3,7 @@ package com.daifan.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,6 +36,10 @@ public class PostListActivity extends SherlockListActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        //TODO:refactoring to remove such bad code
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
