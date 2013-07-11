@@ -12,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import com.daifan.service.MappingJackson2HttpMessageConverter2;
+
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -37,19 +39,25 @@ public class PostService {
     }
 
     private ArrayList<Post> getInternalPosts(String url) {
-        HttpHeaders requestHeaders = new HttpHeaders();
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-        requestHeaders.setAccept(acceptableMediaTypes);
 
-        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
+        try {
+            HttpHeaders requestHeaders = new HttpHeaders();
+            List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+            requestHeaders.setAccept(acceptableMediaTypes);
 
-        ResponseEntity<PostContainer> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
-                PostContainer.class);
+            HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
 
-        return responseEntity.getBody().getPosts();
+            ResponseEntity<PostContainer> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+                    PostContainer.class);
+
+            return responseEntity.getBody().getPosts();
+        } catch (RestClientException e) {
+            Log.e(MainActivity.DAIFAN_TAG, "get posts failed for url " + url, e);
+            return new ArrayList<Post>();
+        }
     }
 
     public boolean postNew(String countStr, String eatDateStr, String nameStr, String descStr, String currUid) {

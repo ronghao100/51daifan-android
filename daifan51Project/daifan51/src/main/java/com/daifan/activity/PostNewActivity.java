@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.daifan.MainActivity;
 import com.daifan.R;
 import com.daifan.domain.User;
 import com.daifan.service.PostService;
@@ -181,13 +183,17 @@ public class PostNewActivity extends SherlockActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return postService.postNew(countStr, eatDateStr, nameStr, descStr, currUid);
+            try {
+                return postService.postNew(countStr, eatDateStr, nameStr, descStr, currUid);
+            }catch (Exception e){
+                Log.e(MainActivity.DAIFAN_TAG, "Exception when postNew " + e.getMessage(), e);
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             runningPost = null;
-            Utils.swithLoadingView(false, postStatusView, postForm, switchAnimTime());
 
             if (success) {
                 Intent postList=new Intent(getApplicationContext(),PostListActivity.class);
@@ -195,8 +201,15 @@ public class PostNewActivity extends SherlockActivity {
                 startActivity(postList);
                 finish();
             } else {
-                postMsgView.setError(getString(R.string.error_postnew_post_failed));
+                postMsgView.setText(getString(R.string.error_postnew_post_failed));
                 postMsgView.requestFocus();
+
+                postMsgView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    Utils.swithLoadingView(false, postStatusView, postForm, switchAnimTime());
+                    }
+                }, 2000);
             }
         }
 

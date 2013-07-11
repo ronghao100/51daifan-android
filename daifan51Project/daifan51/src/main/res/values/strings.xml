@@ -15,6 +15,6 @@
     <string name="prompt_postnew_desc">详细描述</string>
     <string name="action_postnew_post">发布</string>
     <string name="error_postnew_desc_minlen">请简单描述菜品...</string>
-    <string name="error_postnew_post_failed">发布失败，请检查网络服务</string>
+    <string name="error_postnew_post_failed">发布失败，请检查网络连接状态</string>
 
 </resources>

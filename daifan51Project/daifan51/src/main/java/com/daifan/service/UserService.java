@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -55,17 +56,22 @@ public class UserService {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
 
-        ResponseEntity<LoginResult> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-                LoginResult.class);
+        ResponseEntity<LoginResult> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
+                    LoginResult.class);
 
-        Log.d(MainActivity.DAIFAN_TAG, "LoginResult:" + responseEntity.getBody());
+            Log.d(MainActivity.DAIFAN_TAG, "LoginResult:" + responseEntity.getBody());
 
-        User u = responseEntity.getBody().getUser();
-        if(responseEntity.getBody().getSuccess() == 1
-                && u != null
-                && email.trim().equals(u.getEmail())){
-            userDao.addUser(u);
-            return u;
+            User u = responseEntity.getBody().getUser();
+            if (responseEntity.getBody().getSuccess() == 1
+                    && u != null
+                    && email.trim().equals(u.getEmail())) {
+                userDao.addUser(u);
+                return u;
+            }
+        } catch (RestClientException e) {
+            Log.e(MainActivity.DAIFAN_TAG, "failed to post login ", e);
         }
 
         return null;
