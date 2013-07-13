@@ -3,17 +3,22 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.4'
+        classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
 apply plugin: 'android'
 
+repositories {
+    maven { url 'http://repo1.maven.org/maven2' }
+}
+
+configurations {
+    provided
+}
+
 dependencies {
-    compile files("libs/spring-android-core-1.0.1.RELEASE.jar")
-    compile files("libs/spring-android-rest-template-1.0.1.RELEASE.jar")
-    compile files("libs/jackson-core-2.2.0.jar")
-    compile files("libs/jackson-annotations-2.2.0.jar")
-    compile files("libs/jackson-databind-2.2.0.jar")
+    compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
+    provided 'com.fasterxml.jackson.core:jackson-databind:2.2.0'
     compile project(":libraries:actionbarsherlock")
 }
 
@@ -25,4 +30,8 @@ android {
         minSdkVersion 7
         targetSdkVersion 16
     }
+}
+
+android.applicationVariants.each { variant ->
+    variant.javaCompile.classpath += configurations.provided
 }
