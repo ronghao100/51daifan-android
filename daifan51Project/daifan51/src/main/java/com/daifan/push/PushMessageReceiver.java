@@ -1,13 +1,15 @@
 package com.daifan.push;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.baidu.android.pushservice.PushConstants;
+import com.daifan.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * Created by ronghao on 13-7-14.
@@ -18,8 +20,8 @@ public class PushMessageReceiver extends BroadcastReceiver {
      * TAG to Log
      */
     public static final String TAG = PushMessageReceiver.class.getSimpleName();
+    private UserService userService;
 
-    AlertDialog.Builder builder;
 
     /**
      * @param context Context
@@ -72,11 +74,23 @@ public class PushMessageReceiver extends BroadcastReceiver {
             Log.d(TAG, "onMessage: method : " + method);
             Log.d(TAG, "onMessage: result : " + errorCode);
             Log.d(TAG, "onMessage: content : " + content);
-            Toast.makeText(
-                    context,
-                    "method : " + method + "\n result: " + errorCode
-                            + "\n content = " + content, Toast.LENGTH_SHORT)
-                    .show();
+
+            if (PushConstants.METHOD_BIND.equals(method)) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    BindResponse bindResponse = mapper.readValue(content, BindResponse.class);
+                    BindResponse.BindParams bindParams = bindResponse.getBindParams();
+                    String pushUserId = bindParams.getUserId();
+                    String pushChannelId = bindParams.getChannelId();
+                    Log.d(TAG, "bindResponse: user_id : " + pushUserId + " channel_id : " + pushChannelId);
+
+                    userService = new UserService(context);
+                    userService.pushRegister(pushUserId, pushChannelId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
 
 //            Intent responseIntent = null;
 //            responseIntent = new Intent(Utils.ACTION_RESPONSE);
