@@ -11,6 +11,10 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
+import com.daifan.MainActivity;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.adapter.PostAdapter;
@@ -18,6 +22,7 @@ import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
 import com.daifan.activity.lib.PullToRefreshListView;
 import com.daifan.domain.Post;
 import com.daifan.domain.User;
+import com.daifan.push.Constants;
 import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 
@@ -44,6 +49,10 @@ public class PostListActivity extends SherlockListActivity {
 
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
+
+        //start push service
+        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, Constants.API_KEY);
+
         userService = new UserService(getApplicationContext());
 
         if (userService.isLoggedIn()) {
@@ -129,10 +138,10 @@ public class PostListActivity extends SherlockListActivity {
             // Simulates a background job.
             ArrayList<Post> posts = new ArrayList<Post>();
             if (refreshMode == PullToRefreshListView.REFRESHING_DOWN) {
-                Post lastPost=postList.get(postList.size()-1);
+                Post lastPost = postList.get(postList.size() - 1);
                 posts = Singleton.getInstance().getPostService().getOldestPosts(lastPost.getId());
             } else if (refreshMode == PullToRefreshListView.REFRESHING_TOP) {
-                Post firstPost=postList.get(0);
+                Post firstPost = postList.get(0);
                 posts = Singleton.getInstance().getPostService().getLatestPosts(firstPost.getId());
             }
             return posts;

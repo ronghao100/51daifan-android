@@ -101,7 +101,7 @@ public class PostAdapter extends BaseAdapter {
         final LinearLayout commentContainers = (LinearLayout) vi.findViewById(R.id.list_row_comments_container);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txt);
         if (post.getBookedUids().length > 0) {
-            bookedUNameTxt.setText(R.string.booked_names_prefix + post.getBookedUNames());
+            bookedUNameTxt.setText(activity.getString(R.string.booked_names_prefix) + post.getBookedUNames());
             commentContainers.setVisibility(View.VISIBLE);
         }
 
@@ -133,7 +133,7 @@ public class PostAdapter extends BaseAdapter {
 
                 if (post.outofOrder() && !booked) {
                     Toast.makeText(activity, R.string.out_of_order, Toast.LENGTH_LONG).show();
-                    bookBtn.setText(R.string.out_of_order);
+                    bookBtn.setText(activity.getString(R.string.out_of_order));
                     return;
                 }
 
