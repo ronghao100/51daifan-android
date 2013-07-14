@@ -18,6 +18,10 @@ configurations {
 
 dependencies {
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
+    compile files ('libs/pushservice-2.3.0.jar')
+//    compile 'com.fasterxml.jackson.core:jackson-core:2.2.0'
+//    compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.0'
+//    compile 'com.fasterxml.jackson.core:jackson-databind:2.2.0'
     provided 'com.fasterxml.jackson.core:jackson-databind:2.2.0'
     compile project(":libraries:actionbarsherlock")
 }

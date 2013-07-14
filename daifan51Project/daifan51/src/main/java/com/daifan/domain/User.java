@@ -3,7 +3,7 @@ package com.daifan.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Created by 浩 on 13-7-5.
+ * Created by ronghao on 13-7-5.
  */
 public class User {
     @JsonProperty("id")
