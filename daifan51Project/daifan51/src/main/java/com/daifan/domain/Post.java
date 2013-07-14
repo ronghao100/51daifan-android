@@ -1,6 +1,14 @@
 package com.daifan.domain;
 
+import android.text.TextUtils;
+import com.daifan.Singleton;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class Post {
 
@@ -17,17 +25,27 @@ public class Post {
     @JsonProperty("describe")
     private String desc;
     @JsonProperty("count")
-    private String count;
+    private int count;
     @JsonProperty("bookedCount")
-    private String bookedCount;
+    private int bookedCount;
     @JsonProperty("eatDate")
     private String eatDate;
     @JsonProperty("updatedAt")
     private String updatedAt;
     @JsonProperty("createdAt")
-    private String createdAt;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss")
+    private Date createdAt;
     @JsonProperty("address")
     private String address;
+
+    @JsonProperty("images")
+    private String[] images = new String[0];
+
+    @JsonProperty("bookedUids")
+    private String[] bookedUids = new String[0];
+
+    @JsonProperty("comments")
+    private List<Comment> comments = new ArrayList<Comment>();
 
     public String getUserName() {
         return userName;
@@ -69,11 +87,11 @@ public class Post {
         this.desc = desc;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -93,19 +111,19 @@ public class Post {
         this.name = name;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
-    public String getBookedCount() {
+    public int getBookedCount() {
         return bookedCount;
     }
 
-    public void setBookedCount(String bookedCount) {
+    public void setBookedCount(int bookedCount) {
         this.bookedCount = bookedCount;
     }
 
@@ -125,4 +143,98 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
+    public String[] getImages() {
+        //return images;
+        return new String[]{"http://51daifan-images.stor.sinaapp.com/recipe/47d0ad175398780db34e21c0e9623ccf.jpg"};
+    }
+
+    public static String thumb(String path) {
+        return path.replaceFirst(".jpg", "_thumb.jpg");
+    }
+
+    public void setImages(String[] images) {
+        this.images = images;
+    }
+
+    public String[] getBookedUids() {
+        return bookedUids;
+    }
+
+    public void setBookedUids(String[] bookedUids) {
+        this.bookedUids = bookedUids;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public boolean booked(String currUid) {
+        if (currUid != null) {
+            for (String uid : bookedUids) {
+                if (currUid.equals(uid))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void addBooked(User currU) {
+        if (!booked(currU.getId())) {
+            int currLen = this.bookedUids.length;
+            String[] s = new String[currLen + 1];
+            s[currLen] = currU.getId();
+            this.bookedUids = s;
+            Singleton.getInstance().addCommentUidNames(currU);
+        }
+    }
+
+    public String getBookedUNames() {
+        String[] uNames = new String[this.bookedUids.length];
+        for(int i = 0; i < bookedUids.length; i++ ) {
+            uNames[i] = Singleton.getInstance().getUNameById(bookedUids[i]);
+        }
+        return TextUtils.join(", ", uNames);
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "address='" + address + '\'' +
+                ", id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userId=" + userId +
+                ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", count='" + count + '\'' +
+                ", bookedCount='" + bookedCount + '\'' +
+                ", eatDate='" + eatDate + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", createdAt=" + createdAt +
+                ", images=" + Arrays.toString(images) +
+                ", bookedUids=" + Arrays.toString(bookedUids) +
+                ", comments=" + comments +
+                '}';
+    }
+
+    public void undoBook(User currU) {
+        ArrayList<String> newb = new ArrayList<String>();
+        if (currU != null) {
+            for (String uid : bookedUids) {
+                if (!currU.getId().equals(uid))
+                    newb.add(uid);
+            }
+        }
+
+        this.bookedUids = newb.toArray(new String[newb.size()]);
+    }
+
+    public boolean outofOrder() {
+        return this.count <= this.bookedCount;
+    }
 }

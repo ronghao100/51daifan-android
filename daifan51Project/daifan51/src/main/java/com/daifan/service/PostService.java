@@ -2,16 +2,16 @@ package com.daifan.service;
 
 import android.util.Log;
 
-import com.daifan.MainActivity;
+import com.daifan.Singleton;
 import com.daifan.domain.Post;
 import com.daifan.domain.PostContainer;
 
+import com.daifan.domain.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import com.daifan.service.MappingJackson2HttpMessageConverter2;
 
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -41,33 +41,69 @@ public class PostService {
     private ArrayList<Post> getInternalPosts(String url) {
 
         try {
-            HttpHeaders requestHeaders = new HttpHeaders();
-            List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-            requestHeaders.setAccept(acceptableMediaTypes);
+            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
 
-            HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
+            PostContainer resp = responseEntity.getBody();
 
-            ResponseEntity<PostContainer> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
-                    PostContainer.class);
+            Singleton.getInstance().addCommentUidNames(resp.getBookedUidNames());
 
-            return responseEntity.getBody().getPosts();
+            return resp.getPosts();
         } catch (RestClientException e) {
-            Log.e(MainActivity.DAIFAN_TAG, "get posts failed for url " + url, e);
+            Log.e(Singleton.DAIFAN_TAG, "get posts failed for url " + url, e);
             return new ArrayList<Post>();
         }
     }
 
+    public boolean book(Post post) {
+
+        User u = Singleton.getInstance().getCurrUser();
+
+        String params = String.format("postId=%s&food_owner_id=%s&food_owner_name=%s&userId=%s&userName=%s"
+                ,post.getId(), post.getUserId(), post.getUserName(), u.getId(), u.getName());
+
+        String url = REST_API + "/book?" + params;
+
+        try {
+            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            return 1 == responseEntity.getBody().getSuccess();
+        } catch (Exception e) {
+            Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
+            return false;
+        }
+    }
+    public boolean undoBook(Post post) {
+
+        User u = Singleton.getInstance().getCurrUser();
+
+        String params = String.format("postId=%s&userId=%s", post.getId(), u.getId());
+
+        String url = REST_API + "/undo-book?" + params;
+
+        try {
+            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            return 1 == responseEntity.getBody().getSuccess();
+        } catch (Exception e) {
+            Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
+            return false;
+        }
+    }
+
     public boolean postNew(String countStr, String eatDateStr, String nameStr, String descStr, String currUid) {
-        Log.d(MainActivity.DAIFAN_TAG, String.format("postNew count=%s, eatDate=%s, name=%s, desc=%s, uid=%s"
+        Log.d(Singleton.DAIFAN_TAG, String.format("postNew count=%s, eatDate=%s, name=%s, desc=%s, uid=%s"
                 , countStr, eatDateStr, nameStr, descStr, currUid));
 
         String params = String.format("count=%s&eatDate=%s&name=%s&desc=%s&uid=%s", countStr, eatDateStr, nameStr, descStr, currUid);
         String url = REST_API + "/post?" + params;
 
+        ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+        return 1 == responseEntity.getBody().getSuccess();
+    }
 
+    private <T> ResponseEntity<T> httpGet(String url, Class<T> responseType) {
+
+        Log.d(Singleton.DAIFAN_TAG, url);
+
+        //TODO: url encoding for names
         HttpHeaders requestHeaders = new HttpHeaders();
         List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
@@ -77,11 +113,11 @@ public class PostService {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
 
-        ResponseEntity<PostContainer> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
-                PostContainer.class);
+        ResponseEntity<T> rtn = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+                responseType);
 
-        Log.d(MainActivity.DAIFAN_TAG, String.format("postNew res %s", responseEntity.toString()));
+        Log.d(Singleton.DAIFAN_TAG, "response:" + rtn);
 
-        return 1 == responseEntity.getBody().getSuccess();
+        return rtn;
     }
 }

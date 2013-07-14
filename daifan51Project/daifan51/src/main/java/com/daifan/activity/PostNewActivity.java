@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.daifan.MainActivity;
 import com.daifan.R;
+import com.daifan.Singleton;
 import com.daifan.domain.User;
 import com.daifan.service.PostService;
 import com.daifan.service.UserService;
@@ -186,7 +186,7 @@ public class PostNewActivity extends SherlockActivity {
             try {
                 return postService.postNew(countStr, eatDateStr, nameStr, descStr, currUid);
             }catch (Exception e){
-                Log.e(MainActivity.DAIFAN_TAG, "Exception when postNew " + e.getMessage(), e);
+                Log.e(Singleton.DAIFAN_TAG, "Exception when postNew " + e.getMessage(), e);
                 return false;
             }
         }

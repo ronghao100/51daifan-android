@@ -11,12 +11,18 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
 import com.daifan.MainActivity;
 import com.daifan.R;
+import com.daifan.Singleton;
 import com.daifan.activity.adapter.PostAdapter;
 import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
 import com.daifan.activity.lib.PullToRefreshListView;
 import com.daifan.domain.Post;
+import com.daifan.domain.User;
+import com.daifan.push.Constants;
 import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 
@@ -29,7 +35,6 @@ public class PostListActivity extends SherlockListActivity {
     private ArrayList<Post> postList = new ArrayList<Post>();
 
     private UserService userService;
-    private PostService postService;
 
     /**
      * Called when the activity is first created.
@@ -40,12 +45,20 @@ public class PostListActivity extends SherlockListActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Singleton.getInstance().initImageLoader(this.getApplicationContext());
+
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
+
+        //start push service
+        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, Constants.API_KEY);
+
         userService = new UserService(getApplicationContext());
-        postService = new PostService();
 
         if (userService.isLoggedIn()) {
+
+            Singleton.getInstance().setCurrUser(this.userService.getCurrUser());
+
             setContentView(R.layout.pull_to_refresh_list);
 
             mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
@@ -63,7 +76,7 @@ public class PostListActivity extends SherlockListActivity {
             mPullRefreshListView.setBackToTopView(mTopImageView);
             ListView actualListView = mPullRefreshListView.getRefreshableView();
 
-            ArrayList<Post> posts = postService.getPosts();
+            ArrayList<Post> posts = Singleton.getInstance().getPostService().getPosts();
             postList.addAll(posts);
 
             postAdapter = new PostAdapter(this, postList);
@@ -71,11 +84,15 @@ public class PostListActivity extends SherlockListActivity {
             // You can also just use setListAdapter(mAdapter)
             actualListView.setAdapter(postAdapter);
         } else {
-            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(login);
-            finish();
+            startLogin();
         }
+    }
+
+    private void startLogin() {
+        Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+        login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(login);
+        finish();
     }
 
     @Override
@@ -88,7 +105,7 @@ public class PostListActivity extends SherlockListActivity {
                 .setIntent(postNew)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        menu.add("退出")
+        menu.add(R.string.action_logout)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         return true;
@@ -96,13 +113,10 @@ public class PostListActivity extends SherlockListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(MainActivity.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
-        if (item.getTitle().equals("退出")) {
+        Log.d(Singleton.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
+        if (item.getTitle().equals(R.string.action_logout)) {
             userService.logout();
-            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(login);
-            finish();
+            startLogin();
         } else if (item.getTitle().equals("Create")) {
             Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
             postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -124,11 +138,11 @@ public class PostListActivity extends SherlockListActivity {
             // Simulates a background job.
             ArrayList<Post> posts = new ArrayList<Post>();
             if (refreshMode == PullToRefreshListView.REFRESHING_DOWN) {
-                Post lastPost=postList.get(postList.size()-1);
-                posts = postService.getOldestPosts(lastPost.getId());
+                Post lastPost = postList.get(postList.size() - 1);
+                posts = Singleton.getInstance().getPostService().getOldestPosts(lastPost.getId());
             } else if (refreshMode == PullToRefreshListView.REFRESHING_TOP) {
-                Post firstPost=postList.get(0);
-                posts = postService.getLatestPosts(firstPost.getId());
+                Post firstPost = postList.get(0);
+                posts = Singleton.getInstance().getPostService().getLatestPosts(firstPost.getId());
             }
             return posts;
         }
