@@ -72,11 +72,32 @@ public class UserService {
     }
 
     public User register(String name, String email, String password) {
-        if (name.equals("rh")) {
-            User user = new User("1", "michaelrong", email, "2013-6-21");
-            userDao.addUser(user);
-            return user;
+        final String url = String.format("http://51daifan.sinaapp.com/api/register?name=%s&email=%s&password=%s",
+                name.trim(), email.trim(), password);
+        HttpHeaders requestHeaders = getHttpHeaders();
+
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
+
+        ResponseEntity<LoginResult> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
+                    LoginResult.class);
+
+            Log.d(TAG, "RegisterResult:" + responseEntity.getBody());
+
+            User u = responseEntity.getBody().getUser();
+            if (responseEntity.getBody().getSuccess() == 1
+                    && u != null
+                    && email.trim().equals(u.getEmail())) {
+                userDao.addUser(u);
+                return u;
+            }
+        } catch (RestClientException e) {
+            Log.e(TAG, "failed to post register ", e);
         }
+
         return null;
     }
 
