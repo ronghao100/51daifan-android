@@ -1,9 +1,14 @@
 package com.daifan.domain;
 
+import android.text.TextUtils;
+import com.daifan.Singleton;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Post {
 
@@ -20,9 +25,9 @@ public class Post {
     @JsonProperty("describe")
     private String desc;
     @JsonProperty("count")
-    private String count;
+    private int count;
     @JsonProperty("bookedCount")
-    private String bookedCount;
+    private int bookedCount;
     @JsonProperty("eatDate")
     private String eatDate;
     @JsonProperty("updatedAt")
@@ -38,6 +43,9 @@ public class Post {
 
     @JsonProperty("bookedUids")
     private String[] bookedUids = new String[0];
+
+    @JsonProperty("comments")
+    private List<Comment> comments = new ArrayList<Comment>();
 
     public String getUserName() {
         return userName;
@@ -103,19 +111,19 @@ public class Post {
         this.name = name;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
-    public String getBookedCount() {
+    public int getBookedCount() {
         return bookedCount;
     }
 
-    public void setBookedCount(String bookedCount) {
+    public void setBookedCount(int bookedCount) {
         this.bookedCount = bookedCount;
     }
 
@@ -148,6 +156,22 @@ public class Post {
         this.images = images;
     }
 
+    public String[] getBookedUids() {
+        return bookedUids;
+    }
+
+    public void setBookedUids(String[] bookedUids) {
+        this.bookedUids = bookedUids;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public boolean booked(String currUid) {
         if (currUid != null) {
             for (String uid : bookedUids) {
@@ -159,12 +183,58 @@ public class Post {
         return false;
     }
 
-    public void addBooked(String currUid) {
-        if (!booked(currUid)) {
+    public void addBooked(User currU) {
+        if (!booked(currU.getId())) {
             int currLen = this.bookedUids.length;
             String[] s = new String[currLen + 1];
-            s[currLen] = currUid;
+            s[currLen] = currU.getId();
             this.bookedUids = s;
+            Singleton.getInstance().addCommentUidNames(currU);
         }
+    }
+
+    public String getBookedUNames() {
+        String[] uNames = new String[this.bookedUids.length];
+        for(int i = 0; i < bookedUids.length; i++ ) {
+            uNames[i] = Singleton.getInstance().getUNameById(bookedUids[i]);
+        }
+        return TextUtils.join(", ", uNames);
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "address='" + address + '\'' +
+                ", id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userId=" + userId +
+                ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", count='" + count + '\'' +
+                ", bookedCount='" + bookedCount + '\'' +
+                ", eatDate='" + eatDate + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", createdAt=" + createdAt +
+                ", images=" + Arrays.toString(images) +
+                ", bookedUids=" + Arrays.toString(bookedUids) +
+                ", comments=" + comments +
+                '}';
+    }
+
+    public void undoBook(User currU) {
+        ArrayList<String> newb = new ArrayList<String>();
+        if (currU != null) {
+            for (String uid : bookedUids) {
+                if (!currU.getId().equals(uid))
+                    newb.add(uid);
+            }
+        }
+
+        this.bookedUids = newb.toArray(new String[newb.size()]);
+    }
+
+    public boolean outofOrder() {
+        return this.count <= this.bookedCount;
     }
 }

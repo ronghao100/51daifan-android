@@ -17,6 +17,7 @@ import com.daifan.activity.adapter.PostAdapter;
 import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
 import com.daifan.activity.lib.PullToRefreshListView;
 import com.daifan.domain.Post;
+import com.daifan.domain.User;
 import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 
@@ -29,7 +30,6 @@ public class PostListActivity extends SherlockListActivity {
     private ArrayList<Post> postList = new ArrayList<Post>();
 
     private UserService userService;
-    private PostService postService;
 
     /**
      * Called when the activity is first created.
@@ -45,9 +45,11 @@ public class PostListActivity extends SherlockListActivity {
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
         userService = new UserService(getApplicationContext());
-        postService = new PostService();
 
         if (userService.isLoggedIn()) {
+
+            Singleton.getInstance().setCurrUser(this.userService.getCurrUser());
+
             setContentView(R.layout.pull_to_refresh_list);
 
             mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
@@ -65,7 +67,7 @@ public class PostListActivity extends SherlockListActivity {
             mPullRefreshListView.setBackToTopView(mTopImageView);
             ListView actualListView = mPullRefreshListView.getRefreshableView();
 
-            ArrayList<Post> posts = postService.getPosts();
+            ArrayList<Post> posts = Singleton.getInstance().getPostService().getPosts();
             postList.addAll(posts);
 
             postAdapter = new PostAdapter(this, postList);
@@ -128,10 +130,10 @@ public class PostListActivity extends SherlockListActivity {
             ArrayList<Post> posts = new ArrayList<Post>();
             if (refreshMode == PullToRefreshListView.REFRESHING_DOWN) {
                 Post lastPost=postList.get(postList.size()-1);
-                posts = postService.getOldestPosts(lastPost.getId());
+                posts = Singleton.getInstance().getPostService().getOldestPosts(lastPost.getId());
             } else if (refreshMode == PullToRefreshListView.REFRESHING_TOP) {
                 Post firstPost=postList.get(0);
-                posts = postService.getLatestPosts(firstPost.getId());
+                posts = Singleton.getInstance().getPostService().getLatestPosts(firstPost.getId());
             }
             return posts;
         }

@@ -14,10 +14,15 @@ import android.widget.*;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.ImagesActivity;
+import com.daifan.activity.PostListActivity;
+import com.daifan.domain.Comment;
 import com.daifan.domain.Post;
+import com.daifan.domain.User;
 import com.daifan.service.ImageLoader;
+import com.daifan.service.PostService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ronghao on 6/23/13.
@@ -68,14 +73,12 @@ public class PostAdapter extends BaseAdapter {
 
         imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
 
-        // Setting all values in listview
         title.setText(post.getUserName());
         desc.setText(post.getName() + " " + post.getDesc());
 
         long time = post.getCreatedAt().getTime();
         Log.d(Singleton.DAIFAN_TAG, "created at " + post.getCreatedAt());
         createdAtTxt.setText(DateUtils.getRelativeTimeSpanString(time, System.currentTimeMillis(), 0));
-
 
         ImageView imageV = (ImageView) vi.findViewById(R.id.list_row_image);
         if (post.getImages().length == 0)
@@ -94,22 +97,77 @@ public class PostAdapter extends BaseAdapter {
             }
         });
 
+
+        final LinearLayout commentContainers = (LinearLayout) vi.findViewById(R.id.list_row_comments_container);
+        final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txt);
+        if (post.getBookedUids().length > 0) {
+            bookedUNameTxt.setText(R.string.booked_names_prefix + post.getBookedUNames());
+            commentContainers.setVisibility(View.VISIBLE);
+        }
+
+        commentContainers.removeViews(1, commentContainers.getChildCount()-1);
+
+        if (post.getComments().size() > 0) {
+            for (Comment cm : post.getComments()) {
+                TextView tx = new TextView(activity);
+                tx.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": " + cm.getComment());
+                commentContainers.addView(tx);
+            }
+            commentContainers.setVisibility(View.VISIBLE);
+        }
+
         final Button bookBtn = (Button) vi.findViewById(R.id.btnBooked);
-        final String currUid = Singleton.getInstance().getCurrUid();
-        final boolean booked = post.booked(currUid);
+        final User currU = Singleton.getInstance().getCurrUser();
+        final boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
             bookBtn.setText(R.string.bookBtn_cancel);
         }
+        if (post.outofOrder()) {
+            //bookBtn.setTextColor(R.colors.grey);
+        }
+
+
         bookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (post.outofOrder() && !booked) {
+                    Toast.makeText(activity, R.string.out_of_order, Toast.LENGTH_LONG).show();
+                    bookBtn.setText(R.string.out_of_order);
+                    return;
+                }
+
+                if (currU == null) {
+                    Toast.makeText(activity, R.string.login_required, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                final boolean booked = post.booked(currU.getId());
                 bookBtn.setText(booked ? R.string.bookBtn_cancel : R.string.bookBtn_book);
-                post.addBooked(currUid);
-                //TODO: update server data
+
+                if (booked)
+                    post.addBooked(currU);
+                else
+                    post.undoBook(currU);
+
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        PostService postService = Singleton.getInstance().getPostService();
+                        return booked ?
+                                postService.undoBook(post)
+                                : postService.book(post);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean result) {
+                        Log.i(Singleton.DAIFAN_TAG, "onPostExecute of book:" + result);
+                    }
+                }.execute();
             }
         });
 
-        final InputMethodManager inputManager =
+        final InputMethodManager imm =
                 (InputMethodManager) activity.
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -121,7 +179,7 @@ public class PostAdapter extends BaseAdapter {
                 commentTxt.setVisibility(View.VISIBLE);
                 commentTxt.requestFocus();
 
-                inputManager.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -130,12 +188,12 @@ public class PostAdapter extends BaseAdapter {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    //sendMessage();
+
                     handled = true;
                     commentTxt.setVisibility(View.INVISIBLE);
                     commentTxt.setText("");
 
-                    inputManager.hideSoftInputFromWindow(
+                    imm.hideSoftInputFromWindow(
                             activity.getCurrentFocus().getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -143,15 +201,6 @@ public class PostAdapter extends BaseAdapter {
                 return handled;
             }
         });
-
         return vi;
-    }
-
-    class UpdateBookedTask extends AsyncTask {
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
     }
 }

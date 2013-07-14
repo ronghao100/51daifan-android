@@ -1,7 +1,12 @@
 package com.daifan;
 
 import android.content.Context;
+import com.daifan.domain.User;
 import com.daifan.service.ImageLoader;
+import com.daifan.service.PostService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Singleton {
 
@@ -9,7 +14,12 @@ public class Singleton {
     public static final String DAIFAN_TAG = "51daifan";
 
     private ImageLoader imageLoader;
-    private String currUid;
+    /**
+     * Cached for booked user uid=>name mapping.
+     */
+    private Map<Integer, String> uidNames = new HashMap<Integer, String>();
+    private User currUser;
+    private PostService postService;
 
     public ImageLoader getImageLoader() {
         return imageLoader;
@@ -20,15 +30,50 @@ public class Singleton {
     }
 
     public String getCurrUid() {
-        return currUid;
+        return currUser != null? currUser.getId() : null;
     }
 
-    public void setCurrUid(String currUid) {
-        this.currUid = currUid;
+    public void addCommentUidNames(HashMap<Integer, String> commentIdNames) {
+        this.uidNames.putAll(commentIdNames);
+    }
+
+    public User getCurrUser() {
+        return currUser;
+    }
+
+    public void setCurrUser(User currUser) {
+        this.currUser = currUser;
+    }
+
+    public String getUNameById(String bookedUid) {
+        int uid = 0;
+        try {
+            uid = Integer.parseInt(bookedUid);
+        } catch (NumberFormatException e) {
+            return bookedUid;
+        }
+        String s = this.uidNames.get(uid);
+        return s != null? s : "";
+    }
+
+    public void addCommentUidNames(User currU) {
+        this.uidNames.put(Integer.parseInt(currU.getId()), currU.getName());
+    }
+
+    public PostService getPostService() {
+        return postService;
+    }
+
+    public void setPostService(PostService postService) {
+        this.postService = postService;
     }
 
     static class SingleHolder {
         private static final Singleton single = new Singleton();
+    }
+
+    private Singleton() {
+        this.postService = new PostService();
     }
 
     public static Singleton getInstance() {

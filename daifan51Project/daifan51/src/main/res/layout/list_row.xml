@@ -26,47 +26,68 @@
                 android:textColor="#040404"
                 android:typeface="sans"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         <TextView
                 android:id="@+id/desc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#343434"
-                android:layout_marginTop="5dip" />
+                android:layout_marginTop="5dip"/>
 
         <ImageView android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:id="@+id/list_row_image"
-                android:layout_gravity="center_horizontal|left"
-                android:src="@drawable/ic_launcher"
-                android:layout_marginTop="10dp"/>
+                   android:layout_height="120dp"
+                   android:id="@+id/list_row_image"
+                   android:layout_gravity="center_horizontal|left"
+                   android:src="@drawable/ic_launcher"
+                   android:layout_marginTop="10dp"/>
 
         <TextView
                 android:id="@+id/createdAt"
-                android:layout_width="100dp"
+                android:layout_width="96dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/list_row_image"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/btnBooked"
                 android:textColor="#101010"
-                android:layout_marginTop="5dip" />
+                android:layout_marginTop="5dip"/>
 
         <Button
                 android:id="@+id/btnBooked"
-                android:layout_width="fill_parent"
+                android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:text="@string/bookBtn_book"
+                android:layout_below="@id/list_row_image"
+                android:layout_alignParentRight="true"
                 android:textSize="10sp"
                 android:textStyle="normal"
                 android:enabled="true"
                 android:textColor="#ff33b5e5"/>
         <Button
                 android:id="@+id/btnComment"
-                android:layout_width="fill_parent"
+                android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:text="@string/btnComment"
+                android:layout_below="@id/list_row_image"
+                android:layout_alignParentRight="true"
                 android:textSize="10sp"
                 android:textStyle="normal"
                 android:enabled="true"
                 android:textColor="#ff33b5e5"/>
+
+        <LinearLayout android:id="@+id/list_row_comments_container"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:visibility="gone">
+            <TextView
+                    android:id="@+id/booked_uname_txt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#101010"
+                    android:layout_marginTop="5dip"/>
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
