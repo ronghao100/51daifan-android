@@ -3,8 +3,7 @@ package com.daifan.service;
 import android.content.Context;
 import android.util.Log;
 
-import com.daifan.MainActivity;
-import com.daifan.R;
+import com.daifan.Singleton;
 import com.daifan.dao.UserDao;
 import com.daifan.domain.LoginResult;
 import com.daifan.domain.User;
@@ -14,15 +13,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by 浩 on 13-7-5.
@@ -61,7 +56,7 @@ public class UserService {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
                     LoginResult.class);
 
-            Log.d(MainActivity.DAIFAN_TAG, "LoginResult:" + responseEntity.getBody());
+            Log.d(Singleton.DAIFAN_TAG, "LoginResult:" + responseEntity.getBody());
 
             User u = responseEntity.getBody().getUser();
             if (responseEntity.getBody().getSuccess() == 1
@@ -71,7 +66,7 @@ public class UserService {
                 return u;
             }
         } catch (RestClientException e) {
-            Log.e(MainActivity.DAIFAN_TAG, "failed to post login ", e);
+            Log.e(Singleton.DAIFAN_TAG, "failed to post login ", e);
         }
 
         return null;

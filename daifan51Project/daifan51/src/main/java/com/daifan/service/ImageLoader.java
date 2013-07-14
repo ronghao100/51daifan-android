@@ -48,6 +48,15 @@ public class ImageLoader {
         }
     }
 
+    public void preload(String[] urls) {
+        if (urls == null)
+            return ;
+
+        for(String url : urls) {
+            this.getBitmap(url);
+        }
+    }
+
     private void queuePhoto(String url, ImageView imageView)
     {
         PhotoToLoad p=new PhotoToLoad(url, imageView);
@@ -64,10 +73,11 @@ public class ImageLoader {
             return b;
 
         //from web
+        HttpURLConnection conn = null;
         try {
             Bitmap bitmap=null;
             URL imageUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+            conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);
@@ -80,6 +90,9 @@ public class ImageLoader {
         } catch (Exception ex){
             ex.printStackTrace();
             return null;
+        } finally {
+            if (conn != null)
+                conn.disconnect();
         }
     }
 

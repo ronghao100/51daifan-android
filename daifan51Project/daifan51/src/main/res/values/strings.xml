@@ -16,5 +16,10 @@
     <string name="action_postnew_post">发布</string>
     <string name="error_postnew_desc_minlen">请简单描述菜品...</string>
     <string name="error_postnew_post_failed">发布失败，请检查网络连接状态</string>
+    <string name="bookBtn_book">订 饭</string>
+    <string name="bookBtn_cancel">取 消</string>
+    <string name="action_logout">退出</string>
+    <string name="prompt_post_comment">添加评论</string>
+    <string name="btnComment">评论</string>
 
 </resources>

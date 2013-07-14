@@ -21,4 +21,15 @@
         android:paddingRight="10dp"
         android:src="@drawable/lv_backtotop" />
 
+    <EditText
+            android:id="@+id/post_comment_txt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:hint="@string/prompt_post_comment"
+            android:visibility="invisible"
+            android:imeOptions="actionSend"
+            android:inputType="textAutoCorrect|textNoSuggestions" />
+
 </RelativeLayout>

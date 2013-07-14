@@ -11,8 +11,8 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.daifan.MainActivity;
 import com.daifan.R;
+import com.daifan.Singleton;
 import com.daifan.activity.adapter.PostAdapter;
 import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
 import com.daifan.activity.lib.PullToRefreshListView;
@@ -39,6 +39,8 @@ public class PostListActivity extends SherlockListActivity {
         //TODO:refactoring to remove such bad code
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        Singleton.getInstance().initImageLoader(this.getApplicationContext());
 
         setTheme(R.style.Theme_Sherlock_Light);
         super.onCreate(savedInstanceState);
@@ -71,11 +73,15 @@ public class PostListActivity extends SherlockListActivity {
             // You can also just use setListAdapter(mAdapter)
             actualListView.setAdapter(postAdapter);
         } else {
-            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(login);
-            finish();
+            startLogin();
         }
+    }
+
+    private void startLogin() {
+        Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+        login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(login);
+        finish();
     }
 
     @Override
@@ -88,7 +94,7 @@ public class PostListActivity extends SherlockListActivity {
                 .setIntent(postNew)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        menu.add("退出")
+        menu.add(R.string.action_logout)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         return true;
@@ -96,13 +102,10 @@ public class PostListActivity extends SherlockListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(MainActivity.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
-        if (item.getTitle().equals("退出")) {
+        Log.d(Singleton.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
+        if (item.getTitle().equals(R.string.action_logout)) {
             userService.logout();
-            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(login);
-            finish();
+            startLogin();
         } else if (item.getTitle().equals("Create")) {
             Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
             postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
