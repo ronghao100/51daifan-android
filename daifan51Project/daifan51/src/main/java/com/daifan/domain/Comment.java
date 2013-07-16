@@ -20,6 +20,15 @@ public class Comment {
     @JsonProperty("comment")
     private String comment;
 
+    public Comment() {
+    }
+
+    public Comment(int uid, String comment) {
+        this.uid = uid;
+        this.comment = comment;
+        this.commentDate = new Date(); //应该以服务器时间为准
+    }
+
     public String getComment() {
         return comment;
     }

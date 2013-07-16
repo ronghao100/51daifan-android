@@ -237,4 +237,10 @@ public class Post {
     public boolean outofOrder() {
         return this.count <= this.bookedCount;
     }
+
+    public Comment addComment(int uid, String comment) {
+        Comment comm = new Comment(uid, comment);
+        this.comments.add(comm);
+        return comm;
+    }
 }

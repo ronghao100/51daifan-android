@@ -42,38 +42,37 @@
                    android:src="@drawable/ic_launcher"
                    android:layout_marginTop="10dp"/>
 
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
         <TextView
                 android:id="@+id/createdAt"
-                android:layout_width="96dp"
+                android:layout_width="126dp"
+                android:text="10 seconds ago"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/list_row_image"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/btnBooked"
                 android:textColor="#101010"
                 android:layout_marginTop="5dip"/>
 
         <Button
                 android:id="@+id/btnBooked"
-                android:layout_width="96dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bookBtn_book"
-                android:layout_below="@id/list_row_image"
-                android:layout_alignParentRight="true"
                 android:textSize="10sp"
                 android:textStyle="normal"
                 android:enabled="true"
                 android:textColor="#ff33b5e5"/>
+
         <Button
                 android:id="@+id/btnComment"
-                android:layout_width="96dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btnComment"
-                android:layout_below="@id/list_row_image"
-                android:layout_alignParentRight="true"
                 android:textSize="10sp"
                 android:textStyle="normal"
                 android:enabled="true"
                 android:textColor="#ff33b5e5"/>
+        </LinearLayout>
 
         <LinearLayout android:id="@+id/list_row_comments_container"
                 android:orientation="vertical"

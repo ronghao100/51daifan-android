@@ -3,6 +3,7 @@ package com.daifan.service;
 import android.util.Log;
 
 import com.daifan.Singleton;
+import com.daifan.domain.Comment;
 import com.daifan.domain.Post;
 import com.daifan.domain.PostContainer;
 
@@ -119,5 +120,10 @@ public class PostService {
         Log.d(Singleton.DAIFAN_TAG, "response:" + rtn);
 
         return rtn;
+    }
+
+    public Comment postComment(Post post, int currUid, String comment) {
+        Singleton.getInstance().addCommentUidNames(Singleton.getInstance().getCurrUser());
+        return post.addComment(currUid, comment);
     }
 }

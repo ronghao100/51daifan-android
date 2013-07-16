@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.*;
@@ -100,19 +103,13 @@ public class PostAdapter extends BaseAdapter {
 
         final LinearLayout commentContainers = (LinearLayout) vi.findViewById(R.id.list_row_comments_container);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txt);
-        if (post.getBookedUids().length > 0) {
-            bookedUNameTxt.setText(activity.getString(R.string.booked_names_prefix) + post.getBookedUNames());
-            commentContainers.setVisibility(View.VISIBLE);
-        }
+        relayoutBooked(post, commentContainers, bookedUNameTxt);
 
         commentContainers.removeViews(1, commentContainers.getChildCount()-1);
 
         if (post.getComments().size() > 0) {
-            for (Comment cm : post.getComments()) {
-                TextView tx = new TextView(activity);
-                tx.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": " + cm.getComment());
-                commentContainers.addView(tx);
-            }
+            for (Comment cm : post.getComments())
+                appendComment(commentContainers, cm);
             commentContainers.setVisibility(View.VISIBLE);
         }
 
@@ -150,6 +147,8 @@ public class PostAdapter extends BaseAdapter {
                 else
                     post.undoBook(currU);
 
+                relayoutBooked(post, commentContainers, bookedUNameTxt);
+
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
                     protected Boolean doInBackground(Void... params) {
@@ -171,36 +170,88 @@ public class PostAdapter extends BaseAdapter {
                 (InputMethodManager) activity.
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        Button commentBtn = (Button) vi.findViewById(R.id.btnComment);
+        final Button commentBtn = (Button) vi.findViewById(R.id.btnComment);
+
+        final RelativeLayout commentCont = (RelativeLayout) activity.findViewById(R.id.post_comment_container);
         final EditText commentTxt = (EditText) activity.findViewById(R.id.post_comment_txt);
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commentTxt.setVisibility(View.VISIBLE);
+                commentCont.setVisibility(View.VISIBLE);
                 commentTxt.requestFocus();
 
                 imm.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
-        commentTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        commentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
+            public void onClick(View v) {
+                commentTxt.setHint("");
+            }
+        });
 
-                    handled = true;
-                    commentTxt.setVisibility(View.INVISIBLE);
-                    commentTxt.setText("");
+        commentTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                commentTxt.setHint(activity.getString(R.string.prompt_post_comment));
+            }
+        });
 
-                    imm.hideSoftInputFromWindow(
-                            activity.getCurrentFocus().getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
+        final Button postCommentBtn = (Button) activity.findViewById(R.id.post_comment_btn);
+        postCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                }
-                return handled;
+                if (TextUtils.getTrimmedLength(commentTxt.getText()) == 0)
+                    return;
+
+                String comment = commentTxt.getText().toString().trim();
+                String currUid = Singleton.getInstance().getCurrUid();
+                int cUid = Integer.parseInt(currUid);
+                Comment cm = Singleton.getInstance().getPostService().postComment(post, cUid, comment);
+                appendComment(commentContainers, cm);
+                commentContainers.setVisibility(View.VISIBLE);
+
+                commentCont.setVisibility(View.INVISIBLE);
+                commentTxt.setText("");
+
+                imm.hideSoftInputFromWindow(
+                        activity.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+
+        commentTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.getTrimmedLength(commentTxt.getText()) > 0)
+                    postCommentBtn.setAlpha(1.0f);
+                else
+                    postCommentBtn.setAlpha(0.5f);
             }
         });
         return vi;
+    }
+
+    private void relayoutBooked(Post post, LinearLayout commentContainers, TextView bookedUNameTxt) {
+        if (post.getBookedUids().length > 0) {
+            bookedUNameTxt.setText(activity.getString(R.string.booked_names_prefix) + post.getBookedUNames());
+            commentContainers.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void appendComment(LinearLayout commentContainers, Comment cm) {
+        TextView tx = new TextView(activity);
+        tx.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": " + cm.getComment());
+        commentContainers.addView(tx);
     }
 }
