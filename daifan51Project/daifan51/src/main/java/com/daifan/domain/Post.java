@@ -1,8 +1,10 @@
 package com.daifan.domain;
 
 import android.text.TextUtils;
+import android.util.Log;
 import com.daifan.Singleton;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
 
     @JsonProperty("objectId")
@@ -187,6 +190,7 @@ public class Post {
         if (!booked(currU.getId())) {
             int currLen = this.bookedUids.length;
             String[] s = new String[currLen + 1];
+            System.arraycopy(this.bookedUids,0,s,0,currLen);
             s[currLen] = currU.getId();
             this.bookedUids = s;
             Singleton.getInstance().addCommentUidNames(currU);
@@ -229,6 +233,8 @@ public class Post {
                 if (!currU.getId().equals(uid))
                     newb.add(uid);
             }
+        } else {
+            Log.e(Singleton.DAIFAN_TAG, "Current user is null, failed to undo booking " + this.getId());
         }
 
         this.bookedUids = newb.toArray(new String[newb.size()]);

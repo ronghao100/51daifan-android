@@ -32,10 +32,10 @@ import java.util.List;
  */
 public class PostAdapter extends BaseAdapter {
 
-    public static final int IMG_TAG_IMAGES = 1;
     private Activity activity;
     private ArrayList<Post> posts = new ArrayList<Post>();
     private static LayoutInflater inflater = null;
+    private static CommentComp commentComp = null;
     public ImageLoader imageLoader;
 
     public PostAdapter(Activity activity, ArrayList<Post> posts) {
@@ -61,9 +61,12 @@ public class PostAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View vi = view;
-        if (view == null)
+    public View getView(int i, View vi, ViewGroup viewGroup) {
+
+        if (commentComp == null)
+            commentComp = new CommentComp(activity);
+
+        if (vi == null)
             vi = inflater.inflate(R.layout.list_row, null);
 
         TextView title = (TextView) vi.findViewById(R.id.title); // title
@@ -76,7 +79,7 @@ public class PostAdapter extends BaseAdapter {
 
         imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
 
-        title.setText(post.getUserName());
+        title.setText(post.getUserName() + ":" + post.getId());
         desc.setText(post.getName() + " " + post.getDesc());
 
         long time = post.getCreatedAt().getTime();
@@ -115,7 +118,7 @@ public class PostAdapter extends BaseAdapter {
 
         final Button bookBtn = (Button) vi.findViewById(R.id.btnBooked);
         final User currU = Singleton.getInstance().getCurrUser();
-        final boolean booked = (currU == null ? false : post.booked(currU.getId()));
+        boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
             bookBtn.setText(R.string.bookBtn_cancel);
         }
@@ -128,7 +131,7 @@ public class PostAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                if (post.outofOrder() && !booked) {
+                if (post.outofOrder() && !post.booked(currU.getId())) {
                     Toast.makeText(activity, R.string.out_of_order, Toast.LENGTH_LONG).show();
                     bookBtn.setText(activity.getString(R.string.out_of_order));
                     return;
@@ -139,13 +142,14 @@ public class PostAdapter extends BaseAdapter {
                     return;
                 }
 
-                final boolean booked = post.booked(currU.getId());
-                bookBtn.setText(booked ? R.string.bookBtn_cancel : R.string.bookBtn_book);
-
-                if (booked)
-                    post.addBooked(currU);
-                else
+                if (post.booked(currU.getId()))
                     post.undoBook(currU);
+                else
+                    post.addBooked(currU);
+
+
+                final boolean nowBooked = post.booked(currU.getId());
+                bookBtn.setText(nowBooked ? R.string.bookBtn_cancel : R.string.bookBtn_book);
 
                 relayoutBooked(post, commentContainers, bookedUNameTxt);
 
@@ -153,7 +157,7 @@ public class PostAdapter extends BaseAdapter {
                     @Override
                     protected Boolean doInBackground(Void... params) {
                         PostService postService = Singleton.getInstance().getPostService();
-                        return booked ?
+                        return nowBooked ?
                                 postService.undoBook(post)
                                 : postService.book(post);
                     }
@@ -166,85 +170,22 @@ public class PostAdapter extends BaseAdapter {
             }
         });
 
-        final InputMethodManager imm =
-                (InputMethodManager) activity.
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-
         final Button commentBtn = (Button) vi.findViewById(R.id.btnComment);
 
-        final RelativeLayout commentCont = (RelativeLayout) activity.findViewById(R.id.post_comment_container);
-        final EditText commentTxt = (EditText) activity.findViewById(R.id.post_comment_txt);
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commentCont.setVisibility(View.VISIBLE);
-                commentTxt.requestFocus();
-
-                imm.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
+                commentComp.showForPost(post, PostAdapter.this);
             }
         });
 
-        commentTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commentTxt.setHint("");
-            }
-        });
-
-        commentTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                commentTxt.setHint(activity.getString(R.string.prompt_post_comment));
-            }
-        });
-
-        final Button postCommentBtn = (Button) activity.findViewById(R.id.post_comment_btn);
-        postCommentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (TextUtils.getTrimmedLength(commentTxt.getText()) == 0)
-                    return;
-
-                String comment = commentTxt.getText().toString().trim();
-                String currUid = Singleton.getInstance().getCurrUid();
-                int cUid = Integer.parseInt(currUid);
-                Comment cm = Singleton.getInstance().getPostService().postComment(post, cUid, comment);
-                appendComment(commentContainers, cm);
-                commentContainers.setVisibility(View.VISIBLE);
-
-                commentCont.setVisibility(View.INVISIBLE);
-                commentTxt.setText("");
-
-                imm.hideSoftInputFromWindow(
-                        activity.getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        });
-
-        commentTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (TextUtils.getTrimmedLength(commentTxt.getText()) > 0)
-                    postCommentBtn.setAlpha(1.0f);
-                else
-                    postCommentBtn.setAlpha(0.5f);
-            }
-        });
         return vi;
     }
 
     private void relayoutBooked(Post post, LinearLayout commentContainers, TextView bookedUNameTxt) {
         if (post.getBookedUids().length > 0) {
             bookedUNameTxt.setText(activity.getString(R.string.booked_names_prefix) + post.getBookedUNames());
+            Log.d(Singleton.DAIFAN_TAG, "refresh booked names for post " + post.getId() + ", names:" + post.getBookedUNames());
             commentContainers.setVisibility(View.VISIBLE);
         }
     }

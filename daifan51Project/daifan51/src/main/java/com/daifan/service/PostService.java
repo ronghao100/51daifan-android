@@ -123,6 +123,9 @@ public class PostService {
     }
 
     public Comment postComment(Post post, int currUid, String comment) {
+
+        Log.d(Singleton.DAIFAN_TAG, "postComment to post " + post.getId() + " from uid " + currUid);
+
         Singleton.getInstance().addCommentUidNames(Singleton.getInstance().getCurrUser());
         return post.addComment(currUid, comment);
     }

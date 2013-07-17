@@ -28,7 +28,7 @@
             android:layout_height="60dp"
             android:background="#000000"
             android:layout_alignParentBottom="true"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
