@@ -4,20 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.*;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.ImagesActivity;
-import com.daifan.activity.PostListActivity;
 import com.daifan.domain.Comment;
 import com.daifan.domain.Post;
 import com.daifan.domain.User;
@@ -25,7 +20,6 @@ import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ronghao on 6/23/13.
@@ -79,7 +73,7 @@ public class PostAdapter extends BaseAdapter {
 
         imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
 
-        title.setText(post.getUserName() + ":" + post.getId());
+        title.setText(post.getUserName() );
         desc.setText(post.getName() + " " + post.getDesc());
 
         long time = post.getCreatedAt().getTime();
@@ -104,28 +98,30 @@ public class PostAdapter extends BaseAdapter {
         });
 
 
-        final LinearLayout commentContainers = (LinearLayout) vi.findViewById(R.id.list_row_comments_container);
-        final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txt);
-        relayoutBooked(post, commentContainers, bookedUNameTxt);
+        final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txts);
+        final TextView bookedNameLabel = (TextView) vi.findViewById(R.id.booked_uname_label);
+        reLayoutBooked(post, bookedUNameTxt);
 
-        commentContainers.removeViews(1, commentContainers.getChildCount()-1);
+        final RelativeLayout commentContainers = (RelativeLayout) vi.findViewById(R.id.list_row_comments_container);
+        commentContainers.removeViews(0, commentContainers.getChildCount());
 
         if (post.getComments().size() > 0) {
-            for (Comment cm : post.getComments())
-                appendComment(commentContainers, cm);
+            View pre = bookedNameLabel;
+            for (Comment cm : post.getComments()) {
+                pre = appendComment(commentContainers, cm, pre);
+            }
             commentContainers.setVisibility(View.VISIBLE);
         }
 
-        final Button bookBtn = (Button) vi.findViewById(R.id.btnBooked);
+        final ImageButton bookBtn = (ImageButton) vi.findViewById(R.id.btnBooked);
         final User currU = Singleton.getInstance().getCurrUser();
         boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
-            bookBtn.setText(R.string.bookBtn_cancel);
+           // bookBtn.setImageDrawable(R.d);
         }
         if (post.outofOrder()) {
-            //bookBtn.setTextColor(R.colors.grey);
+            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
         }
-
 
         bookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +129,7 @@ public class PostAdapter extends BaseAdapter {
 
                 if (post.outofOrder() && !post.booked(currU.getId())) {
                     Toast.makeText(activity, R.string.out_of_order, Toast.LENGTH_LONG).show();
-                    bookBtn.setText(activity.getString(R.string.out_of_order));
+                    bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
                     return;
                 }
 
@@ -149,9 +145,11 @@ public class PostAdapter extends BaseAdapter {
 
 
                 final boolean nowBooked = post.booked(currU.getId());
-                bookBtn.setText(nowBooked ? R.string.bookBtn_cancel : R.string.bookBtn_book);
+//                bookBtn.setHint(nowBooked ? R.string.bookBtn_cancel : R.string.bookBtn_book);
+                if (post.outofOrder())
+                    bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
 
-                relayoutBooked(post, commentContainers, bookedUNameTxt);
+                reLayoutBooked(post, bookedUNameTxt);
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -170,7 +168,7 @@ public class PostAdapter extends BaseAdapter {
             }
         });
 
-        final Button commentBtn = (Button) vi.findViewById(R.id.btnComment);
+        final ImageButton commentBtn = (ImageButton) vi.findViewById(R.id.btnComment);
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,17 +180,40 @@ public class PostAdapter extends BaseAdapter {
         return vi;
     }
 
-    private void relayoutBooked(Post post, LinearLayout commentContainers, TextView bookedUNameTxt) {
+    private void reLayoutBooked(Post post, TextView bookedUNameTxt) {
+
+        if (bookedUNameTxt == null) {
+            Log.e(Singleton.DAIFAN_TAG, "booked name text view is null");
+            return;
+        }
+
         if (post.getBookedUids().length > 0) {
-            bookedUNameTxt.setText(activity.getString(R.string.booked_names_prefix) + post.getBookedUNames());
+            bookedUNameTxt.setText(post.getBookedUNames());
             Log.d(Singleton.DAIFAN_TAG, "refresh booked names for post " + post.getId() + ", names:" + post.getBookedUNames());
-            commentContainers.setVisibility(View.VISIBLE);
         }
     }
 
-    private void appendComment(LinearLayout commentContainers, Comment cm) {
-        TextView tx = new TextView(activity);
-        tx.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": " + cm.getComment());
-        commentContainers.addView(tx);
+    private TextView appendComment(RelativeLayout commentContainers, Comment cm, View pre) {
+        TextView textLabel = (TextView) new TextView(activity);
+        TextView textView = new TextView(activity);
+
+        LayoutParams p1 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
+        textLabel.setLayoutParams(p1);
+        textLabel.setId(pre != null? pre.getId()+1 : 1);
+        textLabel.setTextColor(activity.getResources().getColor(R.color.post_anota_num_color));
+        textLabel.setPadding(5,2,5,2);
+
+        LayoutParams p2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+        p2.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
+        p2.addRule(RelativeLayout.RIGHT_OF, textLabel.getId());
+        p2.addRule(RelativeLayout.ALIGN_TOP, textLabel.getId());
+        textView.setLayoutParams(p2);
+
+        textLabel.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": ");
+        textView.setText(cm.getComment());
+        commentContainers.addView(textLabel);
+        commentContainers.addView(textView);
+        return textLabel;
     }
 }

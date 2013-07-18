@@ -1,3 +1,5 @@
 <resources>
     <color name="overscroll">#33b5e5</color>
+    <color name="post_anota_txt_color">#999999</color>
+    <color name="post_anota_num_color">#6666ff</color>
 </resources>

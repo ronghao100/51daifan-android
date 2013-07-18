@@ -25,5 +25,7 @@
     <string name="out_of_order">亲没有啦</string>
     <string name="booked_names_prefix">谁订了：</string>
     <string name="post_comment_btn">发表</string>
+    <string name="total">总共</string>
+    <string name="left">还剩</string>
 
 </resources>
