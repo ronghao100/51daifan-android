@@ -146,7 +146,7 @@ public class PostService {
         try {
             ok = (1 == this.httpGet(url, PostContainer.class).getBody().getSuccess());
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+           Log.e(Singleton.DAIFAN_TAG, "error when post comment", e);
         }
         Log.d(Singleton.DAIFAN_TAG, "postComment "+comment+" result: " + ok);
 

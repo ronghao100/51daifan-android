@@ -68,7 +68,6 @@ public class PostAdapter extends BaseAdapter {
         ImageView thumb_image = (ImageView) vi.findViewById(R.id.thumbnail); // thumb image
         TextView createdAtTxt = (TextView) vi.findViewById(R.id.createdAt);
 
-
         final Post post = posts.get(i);
 
         imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
@@ -79,6 +78,10 @@ public class PostAdapter extends BaseAdapter {
         long time = post.getCreatedAt().getTime();
         Log.d(Singleton.DAIFAN_TAG, "created at " + post.getCreatedAt());
         createdAtTxt.setText(DateUtils.getRelativeTimeSpanString(time, System.currentTimeMillis(), 0));
+
+        ((TextView)vi.findViewById(R.id.post_total_num)).setText(String.valueOf(post.getCount()));
+        ((TextView)vi.findViewById(R.id.post_left_num)).setText(String.valueOf(post.getLeft()));
+        ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
 
         ImageView imageV = (ImageView) vi.findViewById(R.id.list_row_image);
         if (post.getImages().length == 0)
@@ -196,19 +199,23 @@ public class PostAdapter extends BaseAdapter {
     private TextView appendComment(RelativeLayout commentContainers, Comment cm, View pre) {
         TextView textLabel = (TextView) new TextView(activity);
         TextView textView = new TextView(activity);
+        textLabel.setId(pre != null? pre.getId()+2 : 1);
+        textView.setId(textLabel.getId()+1);
 
         LayoutParams p1 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
+        p1.addRule(RelativeLayout.ALIGN_BOTTOM, textView.getId());
+
         textLabel.setLayoutParams(p1);
-        textLabel.setId(pre != null? pre.getId()+1 : 1);
         textLabel.setTextColor(activity.getResources().getColor(R.color.post_anota_num_color));
         textLabel.setPadding(5,2,5,2);
+        textLabel.setGravity(Gravity.CENTER_VERTICAL);
 
         LayoutParams p2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
         p2.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
         p2.addRule(RelativeLayout.RIGHT_OF, textLabel.getId());
-        p2.addRule(RelativeLayout.ALIGN_TOP, textLabel.getId());
         textView.setLayoutParams(p2);
+        textView.setPadding(0,2,0,2);
 
         textLabel.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": ");
         textView.setText(cm.getComment());

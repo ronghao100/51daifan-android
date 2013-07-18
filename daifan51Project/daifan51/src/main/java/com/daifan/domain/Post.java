@@ -249,4 +249,9 @@ public class Post {
         this.comments.add(comm);
         return comm;
     }
+
+    public int getLeft() {
+        int left = this.count - this.bookedCount;
+        return left>0? left : 0;
+    }
 }
