@@ -31,8 +31,10 @@ public class Post {
     private int count;
     @JsonProperty("bookedCount")
     private int bookedCount;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss")
     @JsonProperty("eatDate")
-    private String eatDate;
+    private Date eatDate;
     @JsonProperty("updatedAt")
     private String updatedAt;
     @JsonProperty("createdAt")
@@ -130,11 +132,11 @@ public class Post {
         this.bookedCount = bookedCount;
     }
 
-    public String getEatDate() {
+    public Date getEatDate() {
         return eatDate;
     }
 
-    public void setEatDate(String eatDate) {
+    public void setEatDate(Date eatDate) {
         this.eatDate = eatDate;
     }
 
@@ -245,13 +247,33 @@ public class Post {
     }
 
     public Comment addComment(int uid, String comment) {
-        Comment comm = new Comment(uid, comment);
-        this.comments.add(comm);
+
+
+
+        Comment comm = null;
+        if (comments!=null)
+        for(Comment c : this.comments)
+            if (c.getUid() == uid) {
+                comm = c;
+                break;
+            }
+
+        if (comm == null) {
+            comm = new Comment(uid, comment);
+            this.comments.add(comm);
+        } else
+            comm.setComment(comment);
+
         return comm;
     }
 
     public int getLeft() {
         int left = this.count - this.bookedCount;
         return left>0? left : 0;
+    }
+
+    public boolean isInactive() {
+        //TODO:需要处理已经过期的订单，不能依靠本地时间
+        return this.eatDate == null || this.eatDate.before(new Date());
     }
 }
