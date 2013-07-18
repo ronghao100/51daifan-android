@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,8 +127,24 @@ public class PostService {
     public Comment postComment(Post post, int currUid, String comment) {
 
         Log.d(Singleton.DAIFAN_TAG, "postComment to post " + post.getId() + " from uid " + currUid);
-
         Singleton.getInstance().addCommentUidNames(Singleton.getInstance().getCurrUser());
+
+        //TODO: could run in background
+        //TODO: replace uid with uid in session!
+        String url = null;
+        try {
+            url = new StringBuffer().append(REST_API).append("/comment?")
+                    .append("userId=").append(currUid)
+                    .append("&postId=").append(post.getId())
+                    .append("&comment=").append(URLEncoder.encode(comment, "UTF-8"))
+                    .toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        boolean ok = (1 == this.httpGet(url, PostContainer.class).getBody().getSuccess());
+        Log.d(Singleton.DAIFAN_TAG, "postComment "+comment+" result: " + ok);
+
         return post.addComment(currUid, comment);
     }
 }
