@@ -130,6 +130,11 @@ public class PostAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
+                if (post.isInactive()) {
+                    Toast.makeText(activity, R.string.not_active_any_more, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (post.outofOrder() && !post.booked(currU.getId())) {
                     Toast.makeText(activity, R.string.out_of_order, Toast.LENGTH_LONG).show();
                     bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
