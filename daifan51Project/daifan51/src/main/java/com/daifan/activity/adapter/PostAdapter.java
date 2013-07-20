@@ -58,7 +58,9 @@ public class PostAdapter extends BaseAdapter {
     public View getView(int i, View vi, ViewGroup viewGroup) {
 
         if (commentComp == null)
-            commentComp = new CommentComp(activity);
+            commentComp = new CommentComp();
+
+        this.commentComp.onActive(this.activity);
 
         if (vi == null)
             vi = inflater.inflate(R.layout.list_row, null);
@@ -181,6 +183,7 @@ public class PostAdapter extends BaseAdapter {
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(Singleton.DAIFAN_TAG, "accepted commentBtn onclick event");
                 commentComp.showForPost(post, PostAdapter.this);
             }
         });
@@ -210,6 +213,7 @@ public class PostAdapter extends BaseAdapter {
         LayoutParams p1 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
         p1.addRule(RelativeLayout.ALIGN_BOTTOM, textView.getId());
+        p1.addRule(RelativeLayout.ALIGN_TOP, textView.getId());
 
         textLabel.setLayoutParams(p1);
         textLabel.setTextColor(activity.getResources().getColor(R.color.post_anota_num_color));

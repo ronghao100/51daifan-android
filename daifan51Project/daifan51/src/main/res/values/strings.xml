@@ -28,5 +28,6 @@
     <string name="total">总共</string>
     <string name="left">还剩</string>
     <string name="not_active_any_more">亲，已过期</string>
+    <string name="whobookedlabel">谁订了:</string>
 
 </resources>

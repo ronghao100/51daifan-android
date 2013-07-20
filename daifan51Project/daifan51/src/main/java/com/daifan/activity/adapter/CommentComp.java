@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,14 +18,17 @@ import com.daifan.domain.Post;
 
 public class CommentComp {
 
-    private final RelativeLayout commentCont;
-    private final EditText commentTxt;
-    private final InputMethodManager imm;
+    private RelativeLayout commentCont;
+    private EditText commentTxt;
+    private InputMethodManager imm;
 
     private PostAdapter postAdapter;
     private Post post;
 
-    public CommentComp(final Activity ac) {
+    public CommentComp() {
+    }
+
+    public void onActive(final Activity ac) {
         commentCont = (RelativeLayout) ac.findViewById(R.id.post_comment_container);
         commentTxt = (EditText) ac.findViewById(R.id.post_comment_txt);
         imm = (InputMethodManager) ac.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -58,9 +62,6 @@ public class CommentComp {
                 Singleton.getInstance().getPostService().postComment(post, cUid, comment);
                 if (postAdapter != null)
                     postAdapter.notifyDataSetChanged();
-
-                //appendComment(commentContainers, cm);
-                //commentContainers.setVisibility(View.VISIBLE);
 
                 commentCont.setVisibility(View.INVISIBLE);
                 commentTxt.setText("");
@@ -96,5 +97,10 @@ public class CommentComp {
         imm.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
         this.post = post;
         this.postAdapter = postAdapter;
+        Log.d(Singleton.DAIFAN_TAG, "commentCont measuredWidth=" + commentCont.getMeasuredWidth() +", measuredHeight="
+            + commentCont.getMeasuredHeight() + ", width=" + commentCont.getWidth() + ", height=" + commentCont.getHeight());
+
+        Log.d(Singleton.DAIFAN_TAG, "commentCont position left=" + commentCont.getLeft() +", top="
+                + commentCont.getTop());
     }
 }

@@ -143,7 +143,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/post_anota_num_color"
                 android:layout_alignLeft="@id/btnBooked"
-                android:text="谁订了:"
+                android:layout_alignBottom="@+id/booked_uname_txts"
+                android:text="@string/whobookedlabel"
                 android:layout_marginTop="5dip"/>
 
         <TextView android:id="@+id/booked_uname_txts"
@@ -153,7 +154,7 @@
                 android:layout_toRightOf="@id/booked_uname_label"
                 android:textColor="#101010"
                 android:text="Michaelrong"
-                android:layout_alignTop="@id/booked_uname_label"/>
+                android:layout_marginTop="5dip"/>
 
         <RelativeLayout android:id="@+id/list_row_comments_container"
                 android:orientation="vertical"
@@ -164,11 +165,6 @@
                 android:background="#cccccc"
                 android:paddingLeft="5dp"
                 android:layout_gravity="center_horizontal|top">
-            <TextView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textColor="#101010"
-                      android:text="HHHHHH AAAAAAA"/>
         </RelativeLayout>
 
     </RelativeLayout>

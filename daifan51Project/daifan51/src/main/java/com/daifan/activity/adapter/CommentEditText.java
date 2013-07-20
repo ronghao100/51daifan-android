@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 /**
 * Created by liuzhr on 7/16/13.
@@ -25,7 +26,7 @@ public class CommentEditText extends EditText {
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK &&
                 event.getAction() == KeyEvent.ACTION_UP) {
-            this.setVisibility(View.INVISIBLE);
+            ((RelativeLayout)this.getParent()).setVisibility(View.INVISIBLE);
             return false;
         }
         return super.dispatchKeyEvent(event);
