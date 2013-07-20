@@ -64,8 +64,7 @@
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-                android:name=".activity.PersonActivity"
-                android:label="@string/title_activity_person">
+                android:name=".activity.PersonActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".activity.PostListActivity">
