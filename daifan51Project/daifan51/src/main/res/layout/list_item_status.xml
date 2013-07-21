@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<include
+		android:id="@+id/lyItemPortrait"
+		layout="@layout/item_photo_editor" />
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:id="@+id/lyRightLayout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5.0dip">
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TextView
+				android:textSize="15.0sp"
+				android:textStyle="bold"
+				android:textColor="@color/gray_2"
+				android:ellipsize="middle"
+				android:id="@+id/tvItemName"
+				android:paddingLeft="5.0dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5.0dip"
+				android:layout_marginRight="2.0dip"
+				android:maxWidth="125.0dip"
+				android:text=""
+				android:singleLine="true" />
+		</LinearLayout>
+		<TextView
+			android:textColor="#ff000000"
+			android:id="@+id/tvItemContent"
+			android:paddingLeft="5.0dip"
+			android:paddingRight="5.0dip"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8.0dip"
+			android:text=""
+			android:textSize="16.0sp"
+			android:lineSpacingExtra="2.669983dip" />
+		<RelativeLayout
+			android:id="@+id/lyUploadPic1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5.0dip"
+			android:layout_marginTop="5.0dip"
+			android:layout_marginRight="5.0dip"
+			android:layout_marginBottom="5.0dip">
+			<com.android.volley.toolbox.NetworkImageView
+				android:id="@+id/tweet_upload_pic1"
+				android:background="@null"
+				android:visibility="gone"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:scaleType="centerInside"
+				android:maxWidth="@dimen/preview_pic_size"
+				android:maxHeight="@dimen/preview_pic_size"
+				android:minWidth="80.0dip"
+				android:minHeight="80.0dip" />
+		</RelativeLayout>
+		<LinearLayout
+			android:orientation="vertical"
+			android:id="@+id/subLayout"
+			android:background="@drawable/popup"
+			android:visibility="gone"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="6.669983dip"
+			android:layout_marginBottom="4.0dip">
+
+			<TextView
+				android:textSize="16.0sp"
+				android:textColor="#ff000000"
+				android:id="@+id/tvItemSubContent"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="3.0dip"
+				android:layout_marginBottom="3.0dip"
+				android:text=""
+				android:lineSpacingExtra="2.669983dip" />
+			<RelativeLayout
+				android:gravity="center_vertical"
+				android:id="@+id/lyUploadPic2"
+				android:paddingBottom="10.0dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="5.0dip"
+				android:layout_marginTop="5.0dip"
+				android:layout_marginRight="5.0dip"
+				android:layout_marginBottom="5.0dip">
+
+                <com.android.volley.toolbox.NetworkImageView
+                        android:id="@+id/tweet_upload_pic2"
+                        android:background="@null"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerInside"
+                        android:maxWidth="@dimen/preview_pic_size"
+                        android:maxHeight="@dimen/preview_pic_size"
+                        android:minWidth="80.0dip"
+                        android:minHeight="80.0dip" />
+			</RelativeLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/ll_from2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6.669983dip">
+                <ImageView
+                        android:id="@+id/tweet_address_pic2"
+                        android:paddingLeft="2.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/address_icon" />
+                <TextView
+                        android:textSize="12.0sp"
+                        android:textColor="#ff808080"
+                        android:id="@+id/tweet_form2"
+                        android:paddingLeft="5.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0" />
+                <LinearLayout
+                        android:gravity="right|center"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <ImageView
+                            android:id="@+id/tweet_redirect_pic2"
+                            android:paddingLeft="10.0dip"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/love_icon" />
+                    <TextView
+                            android:textSize="12.0sp"
+                            android:textColor="#ffa4b7d6"
+                            android:id="@+id/tweet_redirect2"
+                            android:paddingLeft="2.0dip"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    <ImageView
+                            android:id="@+id/tweet_comment_pic2"
+                            android:paddingLeft="10.0dip"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/comment_icon" />
+                    <TextView
+                            android:textSize="12.0sp"
+                            android:textColor="#ffa4b7d6"
+                            android:id="@+id/tweet_comment2"
+                            android:paddingLeft="2.0dip"
+                            android:paddingRight="5.0dip"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+		</LinearLayout>
+		<LinearLayout
+			android:orientation="horizontal"
+			android:id="@+id/ll_from"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="6.669983dip">
+            <ImageView
+                    android:id="@+id/tweet_address_pic"
+                    android:paddingLeft="2.0dip"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/address_icon" />
+			<TextView
+				android:textSize="12.0sp"
+				android:textColor="#ff808080"
+				android:id="@+id/tweet_form"
+				android:paddingLeft="5.0dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0" />
+			<LinearLayout
+				android:gravity="right|center"
+				android:orientation="horizontal"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<ImageView
+					android:id="@+id/tweet_redirect_pic"
+					android:paddingLeft="10.0dip"
+					android:visibility="gone"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/love_icon" />
+				<TextView
+					android:textSize="12.0sp"
+					android:textColor="#ffa4b7d6"
+					android:id="@+id/tweet_redirect"
+					android:paddingLeft="2.0dip"
+					android:visibility="gone"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+				<ImageView
+					android:id="@+id/tweet_comment_pic"
+					android:paddingLeft="10.0dip"
+					android:visibility="gone"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/comment_icon" />
+				<TextView
+					android:textSize="12.0sp"
+					android:textColor="#ffa4b7d6"
+					android:id="@+id/tweet_comment"
+					android:paddingLeft="2.0dip"
+					android:paddingRight="5.0dip"
+					android:visibility="gone"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+	<ImageView
+		android:layout_gravity="right|center"
+		android:id="@+id/triangleImg"
+		android:visibility="gone"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="2.0dip"
+		android:layout_marginRight="5.0dip"
+		android:contentDescription="@string/app_name"
+		android:src="@drawable/triangle" />
+</LinearLayout>
+

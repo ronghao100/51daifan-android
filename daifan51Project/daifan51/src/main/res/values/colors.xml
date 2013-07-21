@@ -2,4 +2,12 @@
     <color name="overscroll">#33b5e5</color>
     <color name="post_anota_txt_color">#999999</color>
     <color name="post_anota_num_color">#6666ff</color>
+    <color name="dark_slate_gray">#2F4F4F</color>
+    <color name="gray_2">#AFAFAF</color>
+    <color name="gray_1">#C0C0C0</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="page_error_background">@color/white</color>
+    <color name="page_error_text_color">@color/black</color>
 </resources>

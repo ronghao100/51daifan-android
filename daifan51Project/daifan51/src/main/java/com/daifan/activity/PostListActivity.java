@@ -8,22 +8,17 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
-import com.baidu.android.pushservice.PushSettings;
-import com.daifan.MainActivity;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.adapter.PostAdapter;
 import com.daifan.activity.lib.PullToRefreshBase.OnRefreshListener;
 import com.daifan.activity.lib.PullToRefreshListView;
 import com.daifan.domain.Post;
-import com.daifan.domain.User;
 import com.daifan.push.Constants;
-import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 
 import java.util.ArrayList;
@@ -112,7 +107,7 @@ public class PostListActivity extends BaseActivity {
         Log.d(Singleton.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
 
         if (item.getTitle().equals(Singleton.getInstance().getCurrUser().getName().toLowerCase())) {
-            Intent personIntent = new Intent(getApplicationContext(), PersonActivity.class);
+            Intent personIntent = new Intent(getApplicationContext(), PersonalCenterActivity.class);
             personIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(personIntent, 0);
         } else if (item.getTitle().equals("Create")) {

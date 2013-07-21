@@ -5,4 +5,29 @@
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
+
+    <dimen name="preview_pic_size">70.0px</dimen>
+    <dimen name="content_primary_size">18.0sp</dimen>
+
+    <!-- Google+ -->
+    <dimen name="stream_name_text_size">16sp</dimen>
+    <dimen name="stream_original_author_name_text_size">14sp</dimen>
+    <dimen name="stream_content_text_size">16sp</dimen>
+    <dimen name="stream_feedback_text_size">14sp</dimen>
+    <dimen name="stream_fav_icon_size">14dip</dimen>
+
+    <dimen name="image_dialog_max_width">300.0dip</dimen>
+    <dimen name="image_dialog_max_height">385.0dip</dimen>
+
+    <dimen name="action_bar_height">41.0dip</dimen>
+    <dimen name="input_text_height">18sp</dimen>
+
+    <dimen name="page_loading_indicator_left_padding">6.0dip</dimen>
+
+    <!-- android-actionbar -->
+    <dimen name="actionbar_height">45dip</dimen>
+    <dimen name="actionbar_item_height">45dip</dimen>
+    <dimen name="actionbar_item_width">45dip</dimen>
+
+    <dimen name="action_button_min_width">56dp</dimen>
 </resources>

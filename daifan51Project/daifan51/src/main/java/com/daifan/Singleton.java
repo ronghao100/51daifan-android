@@ -4,6 +4,7 @@ import android.content.Context;
 import com.daifan.domain.User;
 import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
+import com.daifan.service.StatusService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class Singleton {
     private Map<Integer, String> uidNames = new HashMap<Integer, String>();
     private User currUser;
     private PostService postService;
+    private StatusService statusService;
 
     public ImageLoader getImageLoader() {
         return imageLoader;
@@ -72,8 +74,13 @@ public class Singleton {
         private static final Singleton single = new Singleton();
     }
 
+    public StatusService getStatusService() {
+        return statusService;
+    }
+
     private Singleton() {
         this.postService = new PostService();
+        this.statusService=new StatusService();
     }
 
     public static Singleton getInstance() {

@@ -68,7 +68,8 @@
                 android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-                android:name=".activity.PersonActivity">
+                android:name=".activity.PersonalCenterActivity"
+                android:screenOrientation="portrait">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".activity.PostListActivity">
