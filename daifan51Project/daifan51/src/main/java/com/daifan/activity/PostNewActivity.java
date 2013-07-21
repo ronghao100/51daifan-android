@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Activity which post new recipes.
  */
-public class PostNewActivity extends SherlockActivity {
+public class PostNewActivity extends BaseActivity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
