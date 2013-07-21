@@ -75,7 +75,7 @@ public class PostListActivity extends BaseActivity {
             ArrayList<Post> posts = Singleton.getInstance().getPostService().getPosts();
             postList.addAll(posts);
 
-            postAdapter = new PostAdapter(this, postList);
+            postAdapter = new PostAdapter(this, postList,getDaifanApplication().getImageLoader());
 
             // You can also just use setListAdapter(mAdapter)
             actualListView.setAdapter(postAdapter);

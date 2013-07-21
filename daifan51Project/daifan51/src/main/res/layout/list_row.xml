@@ -7,13 +7,9 @@
               android:paddingRight="5dp"
         android:paddingBottom="5dp">
 
-    <ImageView
-            android:layout_width="55dp"
-            android:layout_height="50dp"
-            android:id="@+id/thumbnail"
-            android:layout_gravity="center_horizontal|top"
-            android:src="@drawable/ic_launcher"
-            android:layout_marginTop="6dp"/>
+    <include
+            android:id="@+id/lyItemAvatar"
+            layout="@layout/item_avatar" />
 
     <RelativeLayout
             android:orientation="vertical"
@@ -57,7 +53,7 @@
                   android:layout_below="@id/desc"
                   android:layout_alignTop="@id/createdAt"
                   android:layout_marginLeft="5dp"
-                  android:drawableLeft="@drawable/address"
+                  android:drawableLeft="@drawable/address_icon"
                   android:scaleType="fitCenter"
                 android:textColor="@color/post_anota_txt_color"
                 android:text="腾讯北京银科">
@@ -78,13 +74,16 @@
                 android:paddingRight="0dp"
                 android:enabled="true"/>
 
-        <ImageView android:layout_width="120dp"
+        <com.android.volley.toolbox.NetworkImageView
+                   android:layout_width="120dp"
                    android:layout_height="120dp"
                    android:id="@+id/list_row_image"
                    android:layout_below="@id/createdAt"
                    android:layout_gravity="center_horizontal|left"
                    android:src="@drawable/recipe_thumbnail"
-                   android:layout_marginTop="10dp"/>
+                   android:layout_marginTop="10dp"
+                   android:minWidth="80.0dip"
+                   android:minHeight="80.0dip"/>
 
         <ImageButton android:id="@+id/btnBooked"
                 android:layout_width="70dp"

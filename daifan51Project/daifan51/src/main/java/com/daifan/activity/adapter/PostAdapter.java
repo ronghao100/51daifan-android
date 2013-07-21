@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
+
+import com.android.volley.toolbox.NetworkImageView;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.ImagesActivity;
@@ -34,11 +36,14 @@ public class PostAdapter extends BaseAdapter {
     private static CommentComp commentComp = null;
     public ImageLoader imageLoader;
 
-    public PostAdapter(Activity activity, ArrayList<Post> posts) {
+    private final com.android.volley.toolbox.ImageLoader mImageLoader;
+
+    public PostAdapter(Activity activity, ArrayList<Post> posts,com.android.volley.toolbox.ImageLoader imageLoader2) {
         this.activity = activity;
         this.posts = posts;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = Singleton.getInstance().getImageLoader();
+        mImageLoader=imageLoader2;
     }
 
     @Override
@@ -69,12 +74,14 @@ public class PostAdapter extends BaseAdapter {
 
         TextView title = (TextView) vi.findViewById(R.id.title); // title
         TextView desc = (TextView) vi.findViewById(R.id.desc); // artist name
-        ImageView thumb_image = (ImageView) vi.findViewById(R.id.thumbnail); // thumb image
+//        ImageView thumb_image = (ImageView) vi.findViewById(R.id.thumbnail); // thumb image
+        NetworkImageView thumb_image=(NetworkImageView) vi.findViewById(R.id.ivItemAvatar);
         TextView createdAtTxt = (TextView) vi.findViewById(R.id.createdAt);
 
         final Post post = posts.get(i);
 
-        imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
+//        imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
+        thumb_image.setImageUrl(post.getThumbnailUrl(), mImageLoader);
 
         title.setText(post.getUserName() );
         desc.setText(post.getName() + " " + post.getDesc());
@@ -87,9 +94,10 @@ public class PostAdapter extends BaseAdapter {
         ((TextView)vi.findViewById(R.id.post_left_num)).setText(String.valueOf(post.getLeft()));
         ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
 
-        ImageView imageV = (ImageView) vi.findViewById(R.id.list_row_image);
+        NetworkImageView imageV = (NetworkImageView) vi.findViewById(R.id.list_row_image);
         if (post.hasImage())
-            this.imageLoader.DisplayImage(post.getImages().get(0), imageV);
+//            this.imageLoader.DisplayImage(post.getImages().get(0), imageV);
+            imageV.setImageUrl(post.getImages().get(0), mImageLoader);
         else
             imageV.setVisibility(View.GONE);
 
