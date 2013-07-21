@@ -31,5 +31,6 @@
     <string name="left">还剩</string>
     <string name="not_active_any_more">亲，已过期</string>
     <string name="whobookedlabel">谁订了:</string>
+    <string name="bookBtn_book_status">是否可订</string>
 
 </resources>

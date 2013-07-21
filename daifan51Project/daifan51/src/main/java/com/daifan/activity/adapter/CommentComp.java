@@ -29,10 +29,15 @@ public class CommentComp {
     }
 
     public void onActive(final Activity ac) {
-        commentCont = (RelativeLayout) ac.findViewById(R.id.post_comment_container);
+        View v = ac.findViewById(R.id.post_comment_container);
+        if ( !(v instanceof  RelativeLayout)) {
+            Log.e(Singleton.DAIFAN_TAG, "post_comment_container isn't instance of RelativeLayout.");
+            return;
+        }
+
+        commentCont = (RelativeLayout) v;
         commentTxt = (EditText) ac.findViewById(R.id.post_comment_txt);
         imm = (InputMethodManager) ac.getSystemService(Context.INPUT_METHOD_SERVICE);
-
 
         commentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +54,9 @@ public class CommentComp {
         });
 
         final Button postCommentBtn = (Button) ac.findViewById(R.id.post_comment_btn);
+
+        this.changePostCommentBtnState(postCommentBtn);
+
         postCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,12 +91,16 @@ public class CommentComp {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.getTrimmedLength(commentTxt.getText()) > 0)
-                    postCommentBtn.setAlpha(1.0f);
-                else
-                    postCommentBtn.setAlpha(0.5f);
+                changePostCommentBtnState(postCommentBtn);
             }
         });
+    }
+
+    private void changePostCommentBtnState(Button postCommentBtn) {
+        if (TextUtils.getTrimmedLength(commentTxt.getText()) > 0)
+            postCommentBtn.setEnabled(true);
+        else
+            postCommentBtn.setEnabled(false);
     }
 
     public void showForPost(Post post, PostAdapter postAdapter) {

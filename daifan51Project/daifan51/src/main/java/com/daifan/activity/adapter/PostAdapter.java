@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
-
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.ImagesActivity;
@@ -86,19 +88,20 @@ public class PostAdapter extends BaseAdapter {
         ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
 
         ImageView imageV = (ImageView) vi.findViewById(R.id.list_row_image);
-        if (post.getImages().length == 0)
-            imageV.setVisibility(View.GONE);
+        if (post.hasImage())
+            this.imageLoader.DisplayImage(post.getImages().get(0), imageV);
         else
-            this.imageLoader.DisplayImage(Post.thumb(post.getImages()[0]), imageV);
+            imageV.setVisibility(View.GONE);
 
         imageV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent login = new Intent(activity.getApplicationContext(), ImagesActivity.class);
                 login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                login.putExtra("images", post.getImages());
+                ArrayList<String> fullImages = post.fullImages();
+                login.putExtra("images", fullImages.toArray(new String[0]));
                 activity.startActivity(login);
-                imageLoader.preload(post.getImages());
+                imageLoader.preLoad(fullImages);
             }
         });
 

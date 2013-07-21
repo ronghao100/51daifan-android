@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.daifan.R;
+import com.daifan.Singleton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -48,7 +51,7 @@ public class ImageLoader {
         }
     }
 
-    public void preload(String[] urls) {
+    public void preLoad(ArrayList<String> urls) {
         if (urls == null)
             return ;
 
@@ -71,6 +74,8 @@ public class ImageLoader {
         Bitmap b = decodeFile(f);
         if(b!=null)
             return b;
+
+        Log.d(Singleton.DAIFAN_TAG, "loading image " + url);
 
         //from web
         HttpURLConnection conn = null;

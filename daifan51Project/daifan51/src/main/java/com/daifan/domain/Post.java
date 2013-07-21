@@ -44,7 +44,20 @@ public class Post {
     private String address;
 
     @JsonProperty("images")
-    private String[] images = new String[0];
+    private List<String> images = new ArrayList<String>();
+
+    @JsonProperty("image1")
+    private String image1;
+    @JsonProperty("image2")
+    private String image2;
+    @JsonProperty("image3")
+    private String image3;
+    @JsonProperty("image4")
+    private String image4;
+    @JsonProperty("image5")
+    private String image5;
+    @JsonProperty("image6")
+    private String image6;
 
     @JsonProperty("bookedUids")
     private String[] bookedUids = new String[0];
@@ -148,16 +161,35 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
-    public String[] getImages() {
-        //return images;
-        return new String[]{"http://51daifan-images.stor.sinaapp.com/recipe/47d0ad175398780db34e21c0e9623ccf.jpg"};
+    public List<String> getImages() {
+        if (images == null || images.size() == 0) {
+            if (images == null)
+                images = new ArrayList<String>();
+            this.addImage(image1);
+            this.addImage(image2);
+            this.addImage(image3);
+            this.addImage(image4);
+            this.addImage(image5);
+            this.addImage(image6);
+        }
+
+        return this.images;
     }
 
-    public static String thumb(String path) {
-        return path.replaceFirst(".jpg", "_thumb.jpg");
+    private void addImage(String p) {
+        if (p != null && p.trim().length()>0)
+            this.images.add(p);
     }
 
-    public void setImages(String[] images) {
+    public static void main(String[] args) {
+        System.out.println(fullImage("http://51daifan-images.stor.sinaapp.com/recipe/177f27ec2b4db53f1244c626fb01ed13_thumb.jpg"));
+    }
+
+    public static String fullImage(String path) {
+        return path.replaceFirst("_thumb.jpg", ".jpg");
+    }
+
+    public void setImages(List<String> images) {
         this.images = images;
     }
 
@@ -222,7 +254,7 @@ public class Post {
                 ", eatDate='" + eatDate + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", createdAt=" + createdAt +
-                ", images=" + Arrays.toString(images) +
+                ", images=" + images +
                 ", bookedUids=" + Arrays.toString(bookedUids) +
                 ", comments=" + comments +
                 '}';
@@ -247,9 +279,6 @@ public class Post {
     }
 
     public Comment addComment(int uid, String comment) {
-
-
-
         Comment comm = null;
         if (comments!=null)
         for(Comment c : this.comments)
@@ -276,4 +305,18 @@ public class Post {
         //TODO:需要处理已经过期的订单，不能依靠本地时间
         return this.eatDate == null || this.eatDate.before(new Date());
     }
+
+    public boolean hasImage() {
+        return !getImages().isEmpty();
+    }
+
+    public ArrayList<String> fullImages() {
+
+        ArrayList<String> fullImages = new ArrayList<String>();
+        for(String s : this.getImages()) {
+            fullImages.add(fullImage(s));
+        }
+        return fullImages;
+    }
+
 }

@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.daifan.R;
 import com.daifan.Singleton;
+
+import java.util.Arrays;
 
 public class ImagesActivity extends SherlockActivity {
     @Override
@@ -27,6 +31,7 @@ public class ImagesActivity extends SherlockActivity {
             String[] images = in.getStringArrayExtra("images");
             if (images != null)
                 adapter.setImages(images);
+            Log.d(Singleton.DAIFAN_TAG, "images:" + Arrays.toString(images));
         }
 
         viewPager.setAdapter(adapter);
@@ -52,7 +57,7 @@ public class ImagesActivity extends SherlockActivity {
             ImageView imageView = new ImageView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Singleton.getInstance().getImageLoader().DisplayImage(images[position], imageView);
             ((ViewPager) container).addView(imageView, 0);
             return imageView;

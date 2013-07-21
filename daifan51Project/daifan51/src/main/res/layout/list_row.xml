@@ -46,27 +46,31 @@
                 android:layout_width="100dp"
                 android:layout_below="@id/desc"
                 android:text="10 seconds ago"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:textColor="#999999"
                 android:layout_marginTop="5dip"/>
+
         <TextView android:id="@+id/post_address"
                   android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_height="25dp"
                   android:layout_toRightOf="@id/createdAt"
                   android:layout_below="@id/desc"
                   android:layout_alignTop="@id/createdAt"
                   android:layout_marginLeft="5dp"
                   android:drawableLeft="@drawable/address"
+                  android:scaleType="fitCenter"
                 android:textColor="@color/post_anota_txt_color"
                 android:text="腾讯北京银科">
         </TextView>
+
         <ImageButton android:id="@+id/btnComment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_below="@id/desc"
                 android:layout_toRightOf="@id/post_address"
                 android:hint="@string/btnComment"
                 android:src="@drawable/comment"
+                android:scaleType="fitCenter"
                 android:layout_marginLeft="5dp"
                 android:paddingBottom="0dp"
                 android:paddingTop="0dp"
@@ -83,17 +87,19 @@
                    android:layout_marginTop="10dp"/>
 
         <ImageButton android:id="@+id/btnBooked"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="20dp"
                 android:layout_below="@id/list_row_image"
                 android:hint="@string/bookBtn_book"
                 android:src="@drawable/book_go"
+                android:scaleType="centerInside"
                 android:layout_alignLeft="@id/desc"
                 android:paddingBottom="0dp"
                 android:paddingTop="0dp"
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/bookBtn_book_status"/>
 
         <TextView
                 android:id="@+id/post_total_txt"

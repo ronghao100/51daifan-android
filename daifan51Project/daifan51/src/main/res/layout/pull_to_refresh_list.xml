@@ -23,11 +23,12 @@
         android:paddingRight="10dp"
         android:src="@drawable/lv_backtotop"/>
 
-    <RelativeLayout android:id="@+id/post_comment_container"
+    <RelativeLayout android:id="@id/post_comment_container"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:visibility="invisible"
+            android:background="@drawable/comment_edittext_bg"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
@@ -38,19 +39,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:scrollHorizontally="false"
             android:hint="@string/prompt_post_comment"
             android:paddingTop="20dp"
             android:paddingBottom="10dp"
             android:layout_toLeftOf="@+id/post_comment_btn"
             android:inputType="textAutoCorrect|textNoSuggestions|textMultiLine" />
+
     <Button android:id="@+id/post_comment_btn"
-            android:layout_height="50dp"
-            android:layout_width="70dp"
-            android:alpha="0.5"
+            android:layout_height="fill_parent"
+            android:layout_width="111dp"
+            android:background="@drawable/comment_btn"
+            android:enabled="false"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text = "@string/post_comment_btn">
+            android:layout_alignParentRight="true">
     </Button>
     </RelativeLayout>
 
