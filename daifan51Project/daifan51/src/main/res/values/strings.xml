@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" >51daifan
-    </string>
-    <string name="action_settings" >Settings
-    </string>
-    <string name="hello_world" >Hello world!
-    </string>
+    <string name="app_name">51daifan</string>
+    <string name="setting">Settings</string>
+    <string name="help_and_info">Help</string>
+    <string name="more">More</string>
+    <string name="compose">Compose</string>
+    <string name="refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
     <string name="postnew_heading">发布带饭</string>
     <string name="postnew_progress_text">发布中...</string>
     <string name="prompt_postnew_date">带饭日期</string>

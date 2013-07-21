@@ -28,7 +28,7 @@ import com.daifan.service.UserService;
 
 import java.util.ArrayList;
 
-public class PostListActivity extends SherlockListActivity {
+public class PostListActivity extends BaseActivity {
 
     private PullToRefreshListView mPullRefreshListView;
     private PostAdapter postAdapter;
@@ -47,8 +47,9 @@ public class PostListActivity extends SherlockListActivity {
 
         Singleton.getInstance().initImageLoader(this.getApplicationContext());
 
-        setTheme(R.style.Theme_Sherlock_Light);
+
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //start push service
         PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, Constants.API_KEY);
@@ -97,16 +98,11 @@ public class PostListActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
-        postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        menu.add(Singleton.getInstance().getCurrUser().getName().toLowerCase())
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         menu.add("Create")
                 .setIcon(R.drawable.ic_compose_inverse)
-                .setIntent(postNew)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        menu.add(R.string.action_logout)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         return true;
     }
@@ -114,14 +110,17 @@ public class PostListActivity extends SherlockListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(Singleton.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
-        if (item.getTitle().equals(R.string.action_logout)) {
-            userService.logout();
-            startLogin();
+
+        if (item.getTitle().equals(Singleton.getInstance().getCurrUser().getName().toLowerCase())) {
+            Intent personIntent = new Intent(getApplicationContext(), PersonActivity.class);
+            personIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(personIntent, 0);
         } else if (item.getTitle().equals("Create")) {
             Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
             postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(postNew, 0);
         }
+
         return true;
     }
 
