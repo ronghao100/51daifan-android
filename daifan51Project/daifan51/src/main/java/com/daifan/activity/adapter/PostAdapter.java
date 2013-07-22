@@ -144,8 +144,16 @@ public class PostAdapter extends BaseAdapter {
         }
 
         bookBtn.setOnClickListener(new View.OnClickListener() {
+
+            private boolean doing = false;
+
             @Override
             public void onClick(View v) {
+
+                if (doing)  {
+                    Log.d(Singleton.DAIFAN_TAG, "canceling a duplicated clicked.");
+                    return;
+                }
 
                 if (post.isInactive()) {
                     Toast.makeText(activity, R.string.not_active_any_more, Toast.LENGTH_LONG).show();
@@ -163,10 +171,13 @@ public class PostAdapter extends BaseAdapter {
                     return;
                 }
 
-                if (post.booked(currU.getId()))
+                if (post.booked(currU.getId())) {
                     post.undoBook(currU);
-                else
+                    Toast.makeText(activity, R.string.book_undo_op, Toast.LENGTH_LONG).show();
+                } else {
                     post.addBooked(currU);
+                    Toast.makeText(activity, R.string.book_book_op, Toast.LENGTH_LONG).show();
+                }
 
 
                 final boolean nowBooked = post.booked(currU.getId());
@@ -178,16 +189,27 @@ public class PostAdapter extends BaseAdapter {
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
+                    protected void onPreExecute() {
+                        doing = true;
+                    }
+
+                    @Override
                     protected Boolean doInBackground(Void... params) {
                         PostService postService = Singleton.getInstance().getPostService();
                         return nowBooked ?
-                                postService.undoBook(post)
-                                : postService.book(post);
+                                postService.book(post)
+                                 : postService.undoBook(post);
                     }
 
                     @Override
                     protected void onPostExecute(Boolean result) {
                         Log.i(Singleton.DAIFAN_TAG, "onPostExecute of book:" + result);
+                        doing = false;
+                    }
+
+                    @Override
+                    protected void onCancelled(Boolean aBoolean) {
+                        doing = false;
                     }
                 }.execute();
             }
@@ -208,6 +230,8 @@ public class PostAdapter extends BaseAdapter {
 
     private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout, TextView postLeftNumTxt) {
 
+        Log.d(Singleton.DAIFAN_TAG, "relayoutBooked" + post);
+
         postLeftNumTxt.setText(String.valueOf(post.getLeft()));
 
         if (bookedUNameTxt == null) {
@@ -218,7 +242,9 @@ public class PostAdapter extends BaseAdapter {
         if (post.getBookedUids().length > 0) {
             bookedUNameTxt.setText(post.getBookedUNames());
             orderLayout.setVisibility(View.VISIBLE);
-            Log.d(Singleton.DAIFAN_TAG, "refresh booked names for post " + post.getId() + ", names:" + post.getBookedUNames());
+        } else {
+            bookedUNameTxt.setText("");
+            orderLayout.setVisibility(View.GONE);
         }
     }
 

@@ -34,13 +34,13 @@ public class Post {
 
     //TODO: timezone 保持服务器端一致
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "UTC+08")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
     @JsonProperty("eatDate")
     private Date eatDate;
     @JsonProperty("updatedAt")
     private String updatedAt;
     @JsonProperty("createdAt")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "UTC+08")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
     private Date createdAt;
     @JsonProperty("address")
     private String address;
