@@ -104,6 +104,7 @@
             <ImageView
                     android:id="@+id/post_address_pic"
                     android:paddingLeft="2.0dip"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/address_icon"/>
