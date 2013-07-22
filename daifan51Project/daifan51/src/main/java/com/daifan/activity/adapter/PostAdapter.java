@@ -96,6 +96,8 @@ public class PostAdapter extends BaseAdapter {
         if (post.hasImage()){
             imageV.setImageUrl(post.getImages().get(0), mImageLoader);
             imageV.setVisibility(View.VISIBLE);
+        }  else {
+            imageV.setVisibility(View.GONE);
         }
 
         imageV.setOnClickListener(new View.OnClickListener() {
