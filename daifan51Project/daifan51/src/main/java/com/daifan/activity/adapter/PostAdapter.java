@@ -22,6 +22,7 @@ import com.daifan.domain.Post;
 import com.daifan.domain.User;
 import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
+import com.daifan.util.AlertUtil;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  */
 public class PostAdapter extends BaseAdapter {
 
-    private Activity activity;
+    private final Activity activity;
     private ArrayList<Post> posts = new ArrayList<Post>();
     private static LayoutInflater inflater = null;
     private static CommentComp commentComp = null;
@@ -122,7 +123,8 @@ public class PostAdapter extends BaseAdapter {
         final LinearLayout orderLayout = (LinearLayout) vi.findViewById(R.id.subOrderLayout);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txts);
         final ImageView bookedNamePic = (ImageView) vi.findViewById(R.id.book_pic);
-        reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt);
+        final ImageButton bookBtn = (ImageButton) vi.findViewById(R.id.btnBooked);
+        reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt, bookBtn);
 
         final RelativeLayout commentContainers = (RelativeLayout) vi.findViewById(R.id.list_row_comments_container);
         commentContainers.removeViews(0, commentContainers.getChildCount());
@@ -135,17 +137,11 @@ public class PostAdapter extends BaseAdapter {
             commentContainers.setVisibility(View.VISIBLE);
         }
 
-        final ImageButton bookBtn = (ImageButton) vi.findViewById(R.id.btnBooked);
         final User currU = Singleton.getInstance().getCurrUser();
         boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
             // bookBtn.setImageDrawable(R.d);
             // TODO: 需要已经订阅的提示
-        }
-        if (post.outofOrder()) {
-            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
-        } else {
-            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_go));
         }
 
         bookBtn.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +186,7 @@ public class PostAdapter extends BaseAdapter {
                 if (post.outofOrder())
                     bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
 
-                reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt);
+                reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt, bookBtn);
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -226,6 +222,12 @@ public class PostAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.d(Singleton.DAIFAN_TAG, "accepted commentBtn onclick event");
+
+                if (!post.booked(Singleton.getInstance().getCurrUid())) {
+                    AlertUtil.showAlert(activity, R.string.comment_block_title, R.string.comment_block_error);
+                    return;
+                }
+
                 commentComp.showForPost(post, PostAdapter.this);
             }
         });
@@ -233,11 +235,16 @@ public class PostAdapter extends BaseAdapter {
         return vi;
     }
 
-    private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout, TextView postLeftNumTxt) {
+    private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout, TextView postLeftNumTxt, ImageButton bookBtn) {
 
         Log.d(Singleton.DAIFAN_TAG, "relayoutBooked" + post);
 
         postLeftNumTxt.setText(String.valueOf(post.getLeft()));
+        if (post.outofOrder()) {
+            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
+        } else {
+            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_go));
+        }
 
         if (bookedUNameTxt == null) {
             Log.e(Singleton.DAIFAN_TAG, "booked name text view is null");

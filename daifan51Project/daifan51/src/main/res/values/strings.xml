@@ -53,5 +53,7 @@
     <string name="feed_type_book">吃了爱心便当</string>
     <string name="book_book_op">正在订饭...</string>
     <string name="book_undo_op">正在取消订饭</string>
+    <string name="comment_block_title">提示</string>
+    <string name="comment_block_error">Sorry，目前只开放吃过的人评论。</string>
 
 </resources>
