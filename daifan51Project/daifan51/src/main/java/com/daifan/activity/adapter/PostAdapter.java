@@ -87,9 +87,6 @@ public class PostAdapter extends BaseAdapter {
         long time = post.getCreatedAt().getTime();
         Log.d(Singleton.DAIFAN_TAG, "created at " + post.getCreatedAt());
         createdAtTxt.setText(DateUtils.getRelativeTimeSpanString(time, System.currentTimeMillis(), 0));
-
-        ((TextView)vi.findViewById(R.id.post_total_num)).setText(String.valueOf(post.getCount()));
-        ((TextView)vi.findViewById(R.id.post_left_num)).setText(String.valueOf(post.getLeft()));
         ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
 
         NetworkImageView imageV = (NetworkImageView) vi.findViewById(R.id.list_row_image);
@@ -112,11 +109,15 @@ public class PostAdapter extends BaseAdapter {
             }
         });
 
+        TextView postTotalNum = (TextView) vi.findViewById(R.id.post_total_num);
+        postTotalNum.setText(String.valueOf(post.getCount()));
+
+        final TextView postLeftNumTxt = (TextView) vi.findViewById(R.id.post_left_num);
 
         final LinearLayout orderLayout = (LinearLayout)vi.findViewById(R.id.subOrderLayout);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txts);
         final ImageView bookedNamePic = (ImageView) vi.findViewById(R.id.book_pic);
-        reLayoutBooked(post, bookedUNameTxt,orderLayout);
+        reLayoutBooked(post, bookedUNameTxt,orderLayout, postLeftNumTxt);
 
         final RelativeLayout commentContainers = (RelativeLayout) vi.findViewById(R.id.list_row_comments_container);
         commentContainers.removeViews(0, commentContainers.getChildCount());
@@ -134,9 +135,12 @@ public class PostAdapter extends BaseAdapter {
         boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
            // bookBtn.setImageDrawable(R.d);
+           // TODO: 需要已经订阅的提示
         }
         if (post.outofOrder()) {
             bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
+        } else {
+            bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_go));
         }
 
         bookBtn.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +174,7 @@ public class PostAdapter extends BaseAdapter {
                 if (post.outofOrder())
                     bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
 
-                reLayoutBooked(post, bookedUNameTxt,orderLayout);
+                reLayoutBooked(post, bookedUNameTxt,orderLayout, postLeftNumTxt);
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -202,7 +206,9 @@ public class PostAdapter extends BaseAdapter {
         return vi;
     }
 
-    private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout) {
+    private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout, TextView postLeftNumTxt) {
+
+        postLeftNumTxt.setText(String.valueOf(post.getLeft()));
 
         if (bookedUNameTxt == null) {
             Log.e(Singleton.DAIFAN_TAG, "booked name text view is null");

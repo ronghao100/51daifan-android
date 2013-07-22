@@ -32,13 +32,15 @@ public class Post {
     @JsonProperty("bookedCount")
     private int bookedCount;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss")
+    //TODO: timezone 保持服务器端一致
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "UTC+08")
     @JsonProperty("eatDate")
     private Date eatDate;
     @JsonProperty("updatedAt")
     private String updatedAt;
     @JsonProperty("createdAt")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "UTC+08")
     private Date createdAt;
     @JsonProperty("address")
     private String address;
@@ -228,6 +230,7 @@ public class Post {
             s[currLen] = currU.getId();
             this.bookedUids = s;
             Singleton.getInstance().addCommentUidNames(currU);
+            this.bookedCount++;
         }
     }
 
@@ -266,6 +269,9 @@ public class Post {
             for (String uid : bookedUids) {
                 if (!currU.getId().equals(uid))
                     newb.add(uid);
+                else {
+                    this.bookedCount--;
+                }
             }
         } else {
             Log.e(Singleton.DAIFAN_TAG, "Current user is null, failed to undo booking " + this.getId());
@@ -275,7 +281,8 @@ public class Post {
     }
 
     public boolean outofOrder() {
-        return this.count <= this.bookedCount;
+        return this.count <= this.bookedCount
+                || this.isInactive();
     }
 
     public Comment addComment(int uid, String comment) {
