@@ -10,8 +10,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.daifan.R;
@@ -20,7 +26,6 @@ import com.daifan.activity.ImagesActivity;
 import com.daifan.domain.Comment;
 import com.daifan.domain.Post;
 import com.daifan.domain.User;
-import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
 
 import java.util.ArrayList;
@@ -34,7 +39,6 @@ public class PostAdapter extends BaseAdapter {
     private ArrayList<Post> posts = new ArrayList<Post>();
     private static LayoutInflater inflater = null;
     private static CommentComp commentComp = null;
-    public ImageLoader imageLoader;
 
     private final com.android.volley.toolbox.ImageLoader mImageLoader;
 
@@ -42,7 +46,6 @@ public class PostAdapter extends BaseAdapter {
         this.activity = activity;
         this.posts = posts;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageLoader = Singleton.getInstance().getImageLoader();
         mImageLoader = imageLoader2;
     }
 
@@ -110,7 +113,6 @@ public class PostAdapter extends BaseAdapter {
                 ArrayList<String> fullImages = post.fullImages();
                 login.putExtra("images", fullImages.toArray(new String[0]));
                 activity.startActivity(login);
-                imageLoader.preLoad(fullImages);
             }
         });
 

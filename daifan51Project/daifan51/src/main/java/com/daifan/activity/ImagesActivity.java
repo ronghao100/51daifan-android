@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.daifan.R;
 import com.daifan.Singleton;
 
@@ -20,10 +22,11 @@ public class ImagesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images);
+        setTitle(R.string.image_viewer);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_images_viewpager);
 
-        ImagePagerAdapter adapter = new ImagePagerAdapter();
+        ImagePagerAdapter adapter = new ImagePagerAdapter(getDaifanApplication().getImageLoader());
         Intent in = getIntent();
         if (in != null) {
             String[] images = in.getStringArrayExtra("images");
@@ -38,6 +41,11 @@ public class ImagesActivity extends BaseActivity {
     private class ImagePagerAdapter extends PagerAdapter {
 
         private String[] images = new String[0];
+        public ImageLoader mImageLoader;
+
+        public ImagePagerAdapter(ImageLoader imageLoader) {
+            mImageLoader=imageLoader;
+        }
 
         @Override
         public int getCount() {
@@ -52,11 +60,11 @@ public class ImagesActivity extends BaseActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Context context = ImagesActivity.this;
-            ImageView imageView = new ImageView(context);
+            NetworkImageView imageView = new NetworkImageView(context);
             int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            Singleton.getInstance().getImageLoader().DisplayImage(images[position], imageView);
+            imageView.setImageUrl(images[position], mImageLoader);
             ((ViewPager) container).addView(imageView, 0);
             return imageView;
         }
