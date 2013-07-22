@@ -95,11 +95,10 @@ public class PostAdapter extends BaseAdapter {
         ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
 
         NetworkImageView imageV = (NetworkImageView) vi.findViewById(R.id.list_row_image);
-        if (post.hasImage())
-//            this.imageLoader.DisplayImage(post.getImages().get(0), imageV);
+        if (post.hasImage()){
             imageV.setImageUrl(post.getImages().get(0), mImageLoader);
-        else
-            imageV.setVisibility(View.GONE);
+            imageV.setVisibility(View.VISIBLE);
+        }
 
         imageV.setOnClickListener(new View.OnClickListener() {
             @Override
