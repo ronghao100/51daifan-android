@@ -106,6 +106,9 @@ public class CommentComp {
     public void showForPost(Post post, PostAdapter postAdapter) {
         commentCont.setVisibility(View.VISIBLE);
         commentTxt.requestFocus();
+        String myComment = post.myComment(Singleton.getInstance().getCurrUid());
+        commentTxt.setText(myComment);
+        commentTxt.setSelection(myComment.length());
         imm.showSoftInput(commentTxt, InputMethodManager.SHOW_IMPLICIT);
         this.post = post;
         this.postAdapter = postAdapter;

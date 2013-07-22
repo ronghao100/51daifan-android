@@ -34,13 +34,13 @@ public class Post {
 
     //TODO: timezone 保持服务器端一致
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
     @JsonProperty("eatDate")
     private Date eatDate;
     @JsonProperty("updatedAt")
     private String updatedAt;
     @JsonProperty("createdAt")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd kk:mm:ss", timezone = "GMT+08:00")
     private Date createdAt;
     @JsonProperty("address")
     private String address;
@@ -179,7 +179,7 @@ public class Post {
     }
 
     private void addImage(String p) {
-        if (p != null && p.trim().length()>0)
+        if (p != null && p.trim().length() > 0)
             this.images.add(p);
     }
 
@@ -226,7 +226,7 @@ public class Post {
         if (!booked(currU.getId())) {
             int currLen = this.bookedUids.length;
             String[] s = new String[currLen + 1];
-            System.arraycopy(this.bookedUids,0,s,0,currLen);
+            System.arraycopy(this.bookedUids, 0, s, 0, currLen);
             s[currLen] = currU.getId();
             this.bookedUids = s;
             Singleton.getInstance().addCommentUidNames(currU);
@@ -236,7 +236,7 @@ public class Post {
 
     public String getBookedUNames() {
         String[] uNames = new String[this.bookedUids.length];
-        for(int i = 0; i < bookedUids.length; i++ ) {
+        for (int i = 0; i < bookedUids.length; i++) {
             uNames[i] = Singleton.getInstance().getUNameById(bookedUids[i]);
         }
         return TextUtils.join(", ", uNames);
@@ -287,12 +287,12 @@ public class Post {
 
     public Comment addComment(int uid, String comment) {
         Comment comm = null;
-        if (comments!=null)
-        for(Comment c : this.comments)
-            if (c.getUid() == uid) {
-                comm = c;
-                break;
-            }
+        if (comments != null)
+            for (Comment c : this.comments)
+                if (c.getUid() == uid) {
+                    comm = c;
+                    break;
+                }
 
         if (comm == null) {
             comm = new Comment(uid, comment);
@@ -305,7 +305,7 @@ public class Post {
 
     public int getLeft() {
         int left = this.count - this.bookedCount;
-        return left>0? left : 0;
+        return left > 0 ? left : 0;
     }
 
     public boolean isInactive() {
@@ -320,10 +320,27 @@ public class Post {
     public ArrayList<String> fullImages() {
 
         ArrayList<String> fullImages = new ArrayList<String>();
-        for(String s : this.getImages()) {
+        for (String s : this.getImages()) {
             fullImages.add(fullImage(s));
         }
         return fullImages;
     }
 
+    public String myComment(String currUid) {
+
+        if (currUid != null) {
+            int uid;
+            try {
+                uid = Integer.parseInt(currUid);
+            } catch (NumberFormatException e) {
+                return "";
+            }
+            for (Comment c : comments) {
+                if (c.getUid() == uid)
+                    return c.getComment();
+            }
+        }
+
+        return "";
+    }
 }
