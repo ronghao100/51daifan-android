@@ -56,5 +56,6 @@
     <string name="comment_block_title">提示</string>
     <string name="comment_block_error">Sorry，目前只开放吃过的人评论。</string>
     <string name="image_viewer">图片浏览</string>
+    <string name="personal_center_building">个人中心建设中...</string>
 
 </resources>

@@ -107,9 +107,10 @@ public class PostListActivity extends BaseActivity {
         Log.d(Singleton.DAIFAN_TAG, "Menu item title:" + item.getTitle() + " id:" + item.getItemId() + " is selected.");
 
         if (item.getTitle().equals(Singleton.getInstance().getCurrUser().getName().toLowerCase())) {
-            Intent personIntent = new Intent(getApplicationContext(), PersonalCenterActivity.class);
-            personIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(personIntent, 0);
+//            Intent personIntent = new Intent(getApplicationContext(), PersonalCenterActivity.class);
+//            personIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivityForResult(personIntent, 0);
+            displayToast(R.string.personal_center_building);
         } else if (item.getTitle().equals("Create")) {
             Intent postNew = new Intent(getApplicationContext(), PostNewActivity.class);
             postNew.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

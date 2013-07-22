@@ -22,6 +22,7 @@ public class ImagesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setTitle(R.string.image_viewer);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_images_viewpager);

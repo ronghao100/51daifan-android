@@ -226,7 +226,8 @@ public class PostAdapter extends BaseAdapter {
                 Log.d(Singleton.DAIFAN_TAG, "accepted commentBtn onclick event");
 
                 if (!post.booked(Singleton.getInstance().getCurrUid())) {
-                    AlertUtil.showAlert(activity, R.string.comment_block_title, R.string.comment_block_error);
+//                    AlertUtil.showAlert(activity, R.string.comment_block_title, R.string.comment_block_error);
+                    Toast.makeText(activity, R.string.comment_block_error, Toast.LENGTH_LONG).show();
                     return;
                 }
 
