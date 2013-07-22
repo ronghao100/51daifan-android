@@ -5,11 +5,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingRight="5dp"
-        android:paddingBottom="5dp">
+              android:paddingBottom="5dp">
 
     <include
             android:id="@+id/lyItemAvatar"
-            layout="@layout/item_avatar" />
+            layout="@layout/item_avatar"/>
 
     <LinearLayout
             android:orientation="vertical"
@@ -17,10 +17,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5.0dip">
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
             <TextView
                     android:textSize="15.0sp"
                     android:textStyle="bold"
@@ -34,7 +36,8 @@
                     android:layout_marginRight="2.0dip"
                     android:maxWidth="125.0dip"
                     android:text="小Q大厨师傅"
-                    android:singleLine="true" />
+                    android:singleLine="true"/>
+
             <LinearLayout
                     android:gravity="right"
                     android:orientation="horizontal"
@@ -42,6 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5.0dip"
                     android:layout_weight="1.0">
+
                 <TextView
                         android:textSize="12.0sp"
                         android:textColor="#FFFF8800"
@@ -52,9 +56,10 @@
                         android:layout_marginLeft="3.0dip"
                         android:layout_marginRight="6.669983dip"
                         android:text="10 seconds ago"
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentRight="true"/>
             </LinearLayout>
         </LinearLayout>
+
         <TextView
                 android:textColor="#ff000000"
                 android:id="@+id/desc"
@@ -65,7 +70,8 @@
                 android:layout_marginTop="8.0dip"
                 android:text="7月19号 带 苦瓜炒肉+青椒香干+小菜 : 小时候最讨厌吃的就是苦瓜，不知道是生活将我改变了，还是我改变了生活。12"
                 android:textSize="16.0sp"
-                android:lineSpacingExtra="2.669983dip" />
+                android:lineSpacingExtra="2.669983dip"/>
+
         <RelativeLayout
                 android:id="@+id/postUploadPic1"
                 android:layout_width="wrap_content"
@@ -74,6 +80,7 @@
                 android:layout_marginTop="5.0dip"
                 android:layout_marginRight="5.0dip"
                 android:layout_marginBottom="5.0dip">
+
             <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/list_row_image"
                     android:background="@null"
@@ -84,20 +91,23 @@
                     android:maxWidth="@dimen/preview_pic_size"
                     android:maxHeight="@dimen/preview_pic_size"
                     android:minWidth="48.0dip"
-                    android:minHeight="33.0dip" />
+                    android:minHeight="33.0dip"/>
         </RelativeLayout>
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:id="@+id/post_footer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="6.669983dip">
+
             <ImageView
                     android:id="@+id/post_address_pic"
                     android:paddingLeft="2.0dip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/address_icon" />
+                    android:src="@drawable/address_icon"/>
+
             <TextView
                     android:textSize="12.0sp"
                     android:textColor="#ff808080"
@@ -107,24 +117,26 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text="腾讯北京银科"/>
+
             <LinearLayout
                     android:gravity="right|center"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                <ImageButton android:id="@+id/btnComment"
-                             android:layout_width="wrap_content"
-                             android:layout_height="25dp"
-                             android:hint="@string/btnComment"
-                             android:src="@drawable/comment"
-                             android:scaleType="fitCenter"
-                             android:layout_marginLeft="5dp"
-                             android:paddingBottom="0dp"
-                             android:paddingTop="0dp"
-                             android:paddingLeft="0dp"
-                             android:paddingRight="0dp"
-                             android:enabled="true"/>
+                <ImageButton
+                        android:id="@+id/btnComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:hint="@string/btnComment"
+                        android:src="@drawable/comment"
+                        android:scaleType="fitCenter"
+                        android:layout_marginLeft="5dp"
+                        android:paddingBottom="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="0dp"
+                        android:enabled="true"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -134,18 +146,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top">
 
-            <ImageButton android:id="@+id/btnBooked"
-                         android:layout_width="70dp"
-                         android:layout_height="20dp"
-                         android:hint="@string/bookBtn_book"
-                         android:src="@drawable/book_go"
-                         android:scaleType="centerInside"
-                         android:paddingBottom="0dp"
-                         android:paddingTop="0dp"
-                         android:paddingLeft="0dp"
-                         android:paddingRight="0dp"
-                         android:layout_marginTop="5dp"
-                         android:contentDescription="@string/bookBtn_book_status"/>
+            <ImageButton
+                    android:id="@+id/btnBooked"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:hint="@string/bookBtn_book"
+                    android:src="@drawable/book_go"
+                    android:scaleType="centerInside"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:layout_marginTop="5dp"
+                    android:contentDescription="@string/bookBtn_book_status"/>
 
             <TextView
                     android:id="@+id/post_total_txt"
@@ -154,7 +167,7 @@
                     android:layout_toRightOf="@id/btnBooked"
                     android:layout_alignTop="@id/btnBooked"
                     android:layout_marginLeft="5dp"
-                    android:text = "@string/total"
+                    android:text="@string/total"
                     android:textColor="@color/post_anota_txt_color"/>
 
             <TextView
@@ -172,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/post_total_num"
                     android:layout_alignTop="@id/btnBooked"
-                    android:text = "@string/left"
+                    android:text="@string/left"
                     android:textColor="@color/post_anota_txt_color"
                     android:layout_marginLeft="5dip"/>
 
@@ -184,38 +197,54 @@
                     android:layout_alignTop="@id/btnBooked"
                     android:text="3"
                     android:textColor="@color/post_anota_num_color"/>
-
-            <TextView android:layout_below="@id/btnBooked"
-                      android:id="@+id/booked_uname_label"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textColor="@color/post_anota_num_color"
-                      android:layout_alignLeft="@id/btnBooked"
-                      android:layout_alignBottom="@+id/booked_uname_txts"
-                      android:text="@string/whobookedlabel"
-                      android:layout_marginTop="5dip"/>
-
-            <TextView android:id="@+id/booked_uname_txts"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_below="@id/btnBooked"
-                      android:layout_toRightOf="@id/booked_uname_label"
-                      android:textColor="#101010"
-                      android:text="Michaelrong"
-                      android:layout_marginTop="5dip"/>
-
-            <RelativeLayout android:id="@+id/list_row_comments_container"
-                            android:orientation="vertical"
-                            android:layout_below="@id/booked_uname_label"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:background="#cccccc"
-                            android:paddingLeft="5dp"
-                            android:layout_gravity="center_horizontal|top">
-            </RelativeLayout>
-
         </RelativeLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/subOrderLayout"
+                android:background="@drawable/popup"
+                android:visibility="gone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="6.669983dip"
+                android:layout_marginBottom="4.0dip">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                <ImageView
+                        android:id="@+id/book_pic"
+                        android:paddingLeft="2.0dip"
+                        android:paddingRight="2.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/love_icon"
+                        android:layout_marginTop="5dip"/>
+
+                <TextView
+                        android:id="@+id/booked_uname_txts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#101010"
+                        android:text="Michaelrong"
+                        android:layout_marginTop="4dip"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:id="@+id/list_row_comments_container"
+                    android:orientation="vertical"
+                    android:layout_below="@id/book_pic"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:layout_gravity="center_horizontal|top">
+            </RelativeLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

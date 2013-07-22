@@ -74,13 +74,11 @@ public class PostAdapter extends BaseAdapter {
 
         TextView title = (TextView) vi.findViewById(R.id.title); // title
         TextView desc = (TextView) vi.findViewById(R.id.desc); // artist name
-//        ImageView thumb_image = (ImageView) vi.findViewById(R.id.thumbnail); // thumb image
         NetworkImageView thumb_image=(NetworkImageView) vi.findViewById(R.id.ivItemAvatar);
         TextView createdAtTxt = (TextView) vi.findViewById(R.id.createdAt);
 
         final Post post = posts.get(i);
 
-//        imageLoader.DisplayImage(post.getThumbnailUrl(), thumb_image);
         thumb_image.setImageUrl(post.getThumbnailUrl(), mImageLoader);
 
         title.setText(post.getUserName() );
@@ -113,15 +111,16 @@ public class PostAdapter extends BaseAdapter {
         });
 
 
+        final LinearLayout orderLayout = (LinearLayout)vi.findViewById(R.id.subOrderLayout);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txts);
-        final TextView bookedNameLabel = (TextView) vi.findViewById(R.id.booked_uname_label);
-        reLayoutBooked(post, bookedUNameTxt);
+        final ImageView bookedNamePic = (ImageView) vi.findViewById(R.id.book_pic);
+        reLayoutBooked(post, bookedUNameTxt,orderLayout);
 
         final RelativeLayout commentContainers = (RelativeLayout) vi.findViewById(R.id.list_row_comments_container);
         commentContainers.removeViews(0, commentContainers.getChildCount());
 
         if (post.getComments().size() > 0) {
-            View pre = bookedNameLabel;
+            View pre = bookedNamePic;
             for (Comment cm : post.getComments()) {
                 pre = appendComment(commentContainers, cm, pre);
             }
@@ -169,7 +168,7 @@ public class PostAdapter extends BaseAdapter {
                 if (post.outofOrder())
                     bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
 
-                reLayoutBooked(post, bookedUNameTxt);
+                reLayoutBooked(post, bookedUNameTxt,orderLayout);
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -201,7 +200,7 @@ public class PostAdapter extends BaseAdapter {
         return vi;
     }
 
-    private void reLayoutBooked(Post post, TextView bookedUNameTxt) {
+    private void reLayoutBooked(Post post, TextView bookedUNameTxt, LinearLayout orderLayout) {
 
         if (bookedUNameTxt == null) {
             Log.e(Singleton.DAIFAN_TAG, "booked name text view is null");
@@ -210,6 +209,7 @@ public class PostAdapter extends BaseAdapter {
 
         if (post.getBookedUids().length > 0) {
             bookedUNameTxt.setText(post.getBookedUNames());
+            orderLayout.setVisibility(View.VISIBLE);
             Log.d(Singleton.DAIFAN_TAG, "refresh booked names for post " + post.getId() + ", names:" + post.getBookedUNames());
         }
     }
@@ -221,7 +221,7 @@ public class PostAdapter extends BaseAdapter {
         textView.setId(textLabel.getId()+1);
 
         LayoutParams p1 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
+        p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.book_pic);
         p1.addRule(RelativeLayout.ALIGN_BOTTOM, textView.getId());
         p1.addRule(RelativeLayout.ALIGN_TOP, textView.getId());
 
@@ -231,7 +231,7 @@ public class PostAdapter extends BaseAdapter {
         textLabel.setGravity(Gravity.CENTER_VERTICAL);
 
         LayoutParams p2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-        p2.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.booked_uname_label);
+        p2.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.book_pic);
         p2.addRule(RelativeLayout.RIGHT_OF, textLabel.getId());
         textView.setLayoutParams(p2);
         textView.setPadding(0,2,0,2);
