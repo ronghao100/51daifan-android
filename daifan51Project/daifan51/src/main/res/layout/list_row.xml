@@ -104,6 +104,7 @@
             <ImageView
                     android:id="@+id/post_address_pic"
                     android:paddingLeft="2.0dip"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/address_icon"/>
@@ -126,16 +127,12 @@
 
                 <ImageButton
                         android:id="@+id/btnComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@null"
                         android:hint="@string/btnComment"
                         android:src="@drawable/comment"
                         android:scaleType="fitCenter"
-                        android:layout_marginLeft="5dp"
-                        android:paddingBottom="0dp"
-                        android:paddingTop="0dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
                         android:enabled="true"/>
             </LinearLayout>
         </LinearLayout>

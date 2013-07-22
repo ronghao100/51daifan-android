@@ -38,12 +38,12 @@ public class PostAdapter extends BaseAdapter {
 
     private final com.android.volley.toolbox.ImageLoader mImageLoader;
 
-    public PostAdapter(Activity activity, ArrayList<Post> posts,com.android.volley.toolbox.ImageLoader imageLoader2) {
+    public PostAdapter(Activity activity, ArrayList<Post> posts, com.android.volley.toolbox.ImageLoader imageLoader2) {
         this.activity = activity;
         this.posts = posts;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = Singleton.getInstance().getImageLoader();
-        mImageLoader=imageLoader2;
+        mImageLoader = imageLoader2;
     }
 
     @Override
@@ -74,26 +74,31 @@ public class PostAdapter extends BaseAdapter {
 
         TextView title = (TextView) vi.findViewById(R.id.title); // title
         TextView desc = (TextView) vi.findViewById(R.id.desc); // artist name
-        NetworkImageView thumb_image=(NetworkImageView) vi.findViewById(R.id.ivItemAvatar);
+        NetworkImageView thumb_image = (NetworkImageView) vi.findViewById(R.id.ivItemAvatar);
         TextView createdAtTxt = (TextView) vi.findViewById(R.id.createdAt);
 
         final Post post = posts.get(i);
 
         thumb_image.setImageUrl(post.getThumbnailUrl(), mImageLoader);
 
-        title.setText(post.getUserName() );
+        title.setText(post.getUserName());
         desc.setText(post.getName() + " " + post.getDesc());
 
         long time = post.getCreatedAt().getTime();
         Log.d(Singleton.DAIFAN_TAG, "created at " + post.getCreatedAt());
         createdAtTxt.setText(DateUtils.getRelativeTimeSpanString(time, System.currentTimeMillis(), 0));
-        ((TextView)vi.findViewById(R.id.post_address)).setText(post.getAddress());
+        ((TextView) vi.findViewById(R.id.post_address)).setText(post.getAddress());
+        if (post.getAddress() != null && !"".equals(post.getAddress().trim())) {
+            (vi.findViewById(R.id.post_address_pic)).setVisibility(View.VISIBLE);
+        }else{
+            (vi.findViewById(R.id.post_address_pic)).setVisibility(View.GONE);
+        }
 
         NetworkImageView imageV = (NetworkImageView) vi.findViewById(R.id.list_row_image);
-        if (post.hasImage()){
+        if (post.hasImage()) {
             imageV.setImageUrl(post.getImages().get(0), mImageLoader);
             imageV.setVisibility(View.VISIBLE);
-        }  else {
+        } else {
             imageV.setVisibility(View.GONE);
         }
 
@@ -114,10 +119,10 @@ public class PostAdapter extends BaseAdapter {
 
         final TextView postLeftNumTxt = (TextView) vi.findViewById(R.id.post_left_num);
 
-        final LinearLayout orderLayout = (LinearLayout)vi.findViewById(R.id.subOrderLayout);
+        final LinearLayout orderLayout = (LinearLayout) vi.findViewById(R.id.subOrderLayout);
         final TextView bookedUNameTxt = (TextView) vi.findViewById(R.id.booked_uname_txts);
         final ImageView bookedNamePic = (ImageView) vi.findViewById(R.id.book_pic);
-        reLayoutBooked(post, bookedUNameTxt,orderLayout, postLeftNumTxt);
+        reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt);
 
         final RelativeLayout commentContainers = (RelativeLayout) vi.findViewById(R.id.list_row_comments_container);
         commentContainers.removeViews(0, commentContainers.getChildCount());
@@ -134,8 +139,8 @@ public class PostAdapter extends BaseAdapter {
         final User currU = Singleton.getInstance().getCurrUser();
         boolean booked = (currU == null ? false : post.booked(currU.getId()));
         if (booked) {
-           // bookBtn.setImageDrawable(R.d);
-           // TODO: 需要已经订阅的提示
+            // bookBtn.setImageDrawable(R.d);
+            // TODO: 需要已经订阅的提示
         }
         if (post.outofOrder()) {
             bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
@@ -185,7 +190,7 @@ public class PostAdapter extends BaseAdapter {
                 if (post.outofOrder())
                     bookBtn.setImageDrawable(activity.getResources().getDrawable(R.drawable.book_outoforder));
 
-                reLayoutBooked(post, bookedUNameTxt,orderLayout, postLeftNumTxt);
+                reLayoutBooked(post, bookedUNameTxt, orderLayout, postLeftNumTxt);
 
                 new AsyncTask<Void, Void, Boolean>() {
                     @Override
@@ -251,8 +256,8 @@ public class PostAdapter extends BaseAdapter {
     private TextView appendComment(RelativeLayout commentContainers, Comment cm, View pre) {
         TextView textLabel = (TextView) new TextView(activity);
         TextView textView = new TextView(activity);
-        textLabel.setId(pre != null? pre.getId()+2 : 1);
-        textView.setId(textLabel.getId()+1);
+        textLabel.setId(pre != null ? pre.getId() + 2 : 1);
+        textView.setId(textLabel.getId() + 1);
 
         LayoutParams p1 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p1.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.book_pic);
@@ -261,14 +266,14 @@ public class PostAdapter extends BaseAdapter {
 
         textLabel.setLayoutParams(p1);
         textLabel.setTextColor(activity.getResources().getColor(R.color.post_anota_num_color));
-        textLabel.setPadding(5,2,5,2);
+        textLabel.setPadding(5, 2, 5, 2);
         textLabel.setGravity(Gravity.CENTER_VERTICAL);
 
-        LayoutParams p2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams p2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p2.addRule(RelativeLayout.BELOW, pre != null ? pre.getId() : R.id.book_pic);
         p2.addRule(RelativeLayout.RIGHT_OF, textLabel.getId());
         textView.setLayoutParams(p2);
-        textView.setPadding(0,2,0,2);
+        textView.setPadding(0, 2, 0, 2);
 
         textLabel.setText(Singleton.getInstance().getUNameById(String.valueOf(cm.getUid())) + ": ");
         textView.setText(cm.getComment());
