@@ -93,8 +93,10 @@ public class PostListActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Singleton.getInstance().getCurrUser().getName().toLowerCase())
+        if (Singleton.getInstance().getCurrUser() != null)  {
+            menu.add(Singleton.getInstance().getCurrUser().getName().toLowerCase())
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
         menu.add("Create")
                 .setIcon(R.drawable.ic_compose_inverse)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
