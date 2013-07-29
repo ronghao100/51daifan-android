@@ -2,41 +2,50 @@ package com.daifan.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.daifan.DaifanApplication;
 import com.daifan.R;
+import com.daifan.Singleton;
+import com.daifan.activity.lib.PullToRefreshListView;
+import com.daifan.domain.Post;
+
+import java.util.ArrayList;
 
 /**
  * Created by ronghao on 13-7-28.
  * load logo when startup
  */
 public class SplashScreenActivity extends Activity {
-    // Splash screen timer
-    private static int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new Handler().postDelayed(new Runnable() {
+        new GetDataTask().execute();
+    }
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
+    private class GetDataTask extends AsyncTask<Void, Void, ArrayList<Post>> {
 
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i = new Intent(SplashScreenActivity.this, PostListActivity.class);
-                startActivity(i);
+        @Override
+        protected ArrayList<Post> doInBackground(Void... params) {
+            // Simulates a background job.
+            return Singleton.getInstance().getPostService().getPosts();
+        }
 
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+        @Override
+        protected void onPostExecute(ArrayList<Post> posts) {
+            DaifanApplication daifanApplication = DaifanApplication.getDaifanApplication();
+            daifanApplication.postList=posts;
+
+            Intent i = new Intent(SplashScreenActivity.this, PostListActivity.class);
+            i.putExtra("splash", true);
+            startActivity(i);
+
+            finish();
+        }
     }
 }

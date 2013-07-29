@@ -72,10 +72,15 @@ public class PostListActivity extends BaseActivity {
             mPullRefreshListView.setBackToTopView(mTopImageView);
             ListView actualListView = mPullRefreshListView.getRefreshableView();
 
-            ArrayList<Post> posts = Singleton.getInstance().getPostService().getPosts();
-            postList.addAll(posts);
+            Intent i = getIntent();
+            boolean splash = i.getBooleanExtra("splash", false);
+            if (splash) {
+                postList.addAll(getDaifanApplication().postList);
+            } else {
+                postList.addAll(Singleton.getInstance().getPostService().getPosts());
+            }
 
-            postAdapter = new PostAdapter(this, postList,getDaifanApplication().getImageLoader());
+            postAdapter = new PostAdapter(this, postList, getDaifanApplication().getImageLoader());
 
             // You can also just use setListAdapter(mAdapter)
             actualListView.setAdapter(postAdapter);
@@ -93,9 +98,9 @@ public class PostListActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (Singleton.getInstance().getCurrUser() != null)  {
+        if (Singleton.getInstance().getCurrUser() != null) {
             menu.add(Singleton.getInstance().getCurrUser().getName().toLowerCase())
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
         menu.add("Create")
                 .setIcon(R.drawable.ic_compose_inverse)

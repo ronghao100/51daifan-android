@@ -9,6 +9,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.BitmapAjaxCallback;
+import com.daifan.domain.Post;
+
+import java.util.ArrayList;
 
 /**
  * Created by ronghao on 13-7-20.
@@ -19,6 +22,8 @@ public class DaifanApplication extends Application {
     private static DaifanApplication daifanApplication;
     private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(20);
     private ImageLoader mImageLoader;
+
+    public ArrayList<Post> postList = new ArrayList<Post>();
 
     @Override
     public void onCreate() {
