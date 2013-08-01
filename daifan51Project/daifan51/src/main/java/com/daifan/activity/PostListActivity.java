@@ -77,7 +77,9 @@ public class PostListActivity extends BaseActivity {
             if (splash) {
                 postList.addAll(getDaifanApplication().postList);
             } else {
-                postList.addAll(Singleton.getInstance().getPostService().getPosts());
+                //ArrayList<Post> posts = Singleton.getInstance().getPostService().getPosts();
+            	//.addAll(posts);
+            	new GetDataTask(PullToRefreshListView.REFRESHING_TOP).execute();
             }
 
             postAdapter = new PostAdapter(this, postList, getDaifanApplication().getImageLoader());
@@ -143,8 +145,8 @@ public class PostListActivity extends BaseActivity {
                 Post lastPost = postList.get(postList.size() - 1);
                 posts = Singleton.getInstance().getPostService().getOldestPosts(lastPost.getId());
             } else if (refreshMode == PullToRefreshListView.REFRESHING_TOP) {
-                Post firstPost = postList.get(0);
-                posts = Singleton.getInstance().getPostService().getLatestPosts(firstPost.getId());
+                int firstPostId = postList!=null && !postList.isEmpty() ?  postList.get(0).getId():0;
+                posts = Singleton.getInstance().getPostService().getLatestPosts(firstPostId);
             }
             return posts;
         }
