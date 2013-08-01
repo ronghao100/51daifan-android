@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
@@ -342,5 +339,26 @@ public class Post {
         }
 
         return "";
+    }
+
+    public boolean removeComment(String currUid) {
+        if (currUid != null) {
+            int uid;
+            try {
+                uid = Integer.parseInt(currUid);
+            } catch (NumberFormatException e) {
+                Log.e(Singleton.DAIFAN_TAG, "error", e);
+                return false;
+            }
+
+            for (Iterator<Comment> it = comments.iterator();  it.hasNext();) {
+                if (it.next().getUid() == uid)  {
+                    it.remove();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

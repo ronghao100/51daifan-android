@@ -174,9 +174,11 @@ public class PostAdapter extends BaseAdapter {
                     return;
                 }
 
+                boolean isUndo = false;
                 if (post.booked(currU.getId())) {
                     post.undoBook(currU);
                     Toast.makeText(activity, R.string.book_undo_op, Toast.LENGTH_LONG).show();
+                    isUndo = true;
                 } else {
                     post.addBooked(currU);
                     Toast.makeText(activity, R.string.book_book_op, Toast.LENGTH_LONG).show();
@@ -208,6 +210,10 @@ public class PostAdapter extends BaseAdapter {
                     protected void onPostExecute(Boolean result) {
                         Log.i(Singleton.DAIFAN_TAG, "onPostExecute of book:" + result);
                         doing = false;
+                        if (result) {
+                            post.removeComment(currU.getId());
+                            PostAdapter.this.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
