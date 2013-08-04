@@ -9,7 +9,6 @@ import android.os.Handler;
 import com.daifan.DaifanApplication;
 import com.daifan.R;
 import com.daifan.Singleton;
-import com.daifan.activity.lib.PullToRefreshListView;
 import com.daifan.domain.Post;
 
 import java.util.ArrayList;
@@ -19,6 +18,9 @@ import java.util.ArrayList;
  * load logo when startup
  */
 public class SplashScreenActivity extends Activity {
+    /** Max waiting time in the splash view */
+    public static final int MAX_WAIT_SECONDS = 5;
+    private volatile boolean GONE_TO_POSTLIST = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,35 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash);
 
         new GetDataTask().execute();
+
+        postDelay(System.currentTimeMillis(), new Handler());
+    }
+
+    private void postDelay(final long start, final Handler ha) {
+        ha.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (GONE_TO_POSTLIST)
+                    return;
+
+                if (System.currentTimeMillis()-start > MAX_WAIT_SECONDS * 1000)
+                    gotoPostList();
+                else
+                    postDelay(start, ha);
+            }
+        }, 1000);
+    }
+
+    private void gotoPostList() {
+        if (GONE_TO_POSTLIST)
+            return;
+
+        this.GONE_TO_POSTLIST = true;
+        Intent i = new Intent(this, PostListActivity.class);
+        i.putExtra("splash", true);
+        startActivity(i);
+
+        finish();
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, ArrayList<Post>> {
@@ -38,14 +69,10 @@ public class SplashScreenActivity extends Activity {
 
         @Override
         protected void onPostExecute(ArrayList<Post> posts) {
-            DaifanApplication daifanApplication = DaifanApplication.getDaifanApplication();
-            daifanApplication.postList=posts;
-
-            Intent i = new Intent(SplashScreenActivity.this, PostListActivity.class);
-            i.putExtra("splash", true);
-            startActivity(i);
-
-            finish();
+            if (posts != null) {
+                DaifanApplication.getDaifanApplication().postList=posts;
+                gotoPostList();
+            }
         }
     }
 }

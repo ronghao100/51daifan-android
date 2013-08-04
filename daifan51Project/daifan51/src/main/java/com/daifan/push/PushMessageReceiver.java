@@ -3,6 +3,7 @@ package com.daifan.push;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.baidu.android.pushservice.PushConstants;
@@ -76,19 +77,27 @@ public class PushMessageReceiver extends BroadcastReceiver {
             Log.d(TAG, "onMessage: content : " + content);
 
             if (PushConstants.METHOD_BIND.equals(method)) {
-                ObjectMapper mapper = new ObjectMapper();
-                try {
-                    BindResponse bindResponse = mapper.readValue(content, BindResponse.class);
-                    BindResponse.BindParams bindParams = bindResponse.getBindParams();
-                    String pushUserId = bindParams.getUserId();
-                    String pushChannelId = bindParams.getChannelId();
-                    Log.d(TAG, "bindResponse: user_id : " + pushUserId + " channel_id : " + pushChannelId);
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            BindResponse bindResponse = mapper.readValue(content, BindResponse.class);
+                            BindResponse.BindParams bindParams = bindResponse.getBindParams();
+                            String pushUserId = bindParams.getUserId();
+                            String pushChannelId = bindParams.getChannelId();
+                            Log.d(TAG, "bindResponse: user_id : " + pushUserId + " channel_id : " + pushChannelId);
 
-                    userService = new UserService(context);
-                    userService.pushRegister(pushUserId, pushChannelId);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                            userService = new UserService(context);
+                            userService.pushRegister(pushUserId, pushChannelId);
+                            return true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    }
+                }.execute();
+                Log.d(TAG, "run bind method at async task...");
             }
 
 
