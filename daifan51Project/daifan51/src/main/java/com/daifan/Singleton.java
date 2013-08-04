@@ -1,12 +1,16 @@
 package com.daifan;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import com.daifan.domain.User;
 import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
 import com.daifan.service.StatusService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Singleton {
@@ -98,5 +102,12 @@ public class Singleton {
                 this.imageLoaderInited = true;
             }
         }
+    }
+
+    public static boolean isIntentAvailable(Context context, final Intent intent) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 }

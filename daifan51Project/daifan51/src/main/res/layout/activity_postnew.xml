@@ -102,6 +102,29 @@
                     android:layout_height="fill_parent"
                     android:orientation="horizontal"
                     android:padding="10dp">
+                <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+                    <LinearLayout
+                            android:id="@+id/mygallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                        <ImageView
+                                android:id="@+id/postnew_add_pic"
+                                android:src="@drawable/pic_plus"
+                                android:background="@null"
+                                android:visibility="visible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:scaleType="centerInside"
+                                android:maxWidth="@dimen/preview_pic_size"
+                                android:maxHeight="@dimen/preview_pic_size"
+                                android:minWidth="48.0dip"
+                                android:minHeight="33.0dip"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
                 <EditText
                         android:id="@+id/postnew_desc"
                         android:singleLine="true"

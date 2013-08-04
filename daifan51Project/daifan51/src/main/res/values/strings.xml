@@ -58,4 +58,7 @@
     <string name="image_viewer">图片浏览</string>
     <string name="personal_center_building">个人中心建设中...</string>
 
+    <string name="take_photo">"拍照"</string>
+    <string name="pick_photo">"从图库中选择照片"</string>
+
 </resources>
