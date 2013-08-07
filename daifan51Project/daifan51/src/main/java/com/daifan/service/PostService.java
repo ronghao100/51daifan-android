@@ -8,7 +8,6 @@ import com.daifan.domain.Post;
 import com.daifan.domain.PostContainer;
 
 import com.daifan.domain.User;
-import com.fasterxml.jackson.core.JsonParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -45,11 +44,11 @@ public class PostService {
 
         try {
             ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            if (responseEntity == null)
+                return new ArrayList<Post>();
 
             PostContainer resp = responseEntity.getBody();
-
             Singleton.getInstance().addCommentUidNames(resp.getBookedUidNames());
-
             return resp.getPosts();
         } catch (RestClientException e) {
             Log.e(Singleton.DAIFAN_TAG, "get posts failed for url " + url, e);
@@ -68,7 +67,7 @@ public class PostService {
 
         try {
             ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
-            return 1 == responseEntity.getBody().getSuccess();
+            return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
         } catch (Exception e) {
             Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
             return false;
@@ -84,7 +83,7 @@ public class PostService {
 
         try {
             ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
-            return 1 == responseEntity.getBody().getSuccess();
+            return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
         } catch (Exception e) {
             Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
             return false;
@@ -99,9 +98,16 @@ public class PostService {
         String url = Singleton.REST_API + "/post?" + params;
 
         ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
-        return 1 == responseEntity.getBody().getSuccess();
+        return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
     }
 
+    /**
+     *
+     * @param url
+     * @param responseType
+     * @param <T>
+     * @return null if exception
+     */
     private <T> ResponseEntity<T> httpGet(String url, Class<T> responseType) {
 
         Log.d(Singleton.DAIFAN_TAG, url);
@@ -148,7 +154,8 @@ public class PostService {
 
         boolean ok = false;
         try {
-            ok = (1 == this.httpGet(url, PostContainer.class).getBody().getSuccess());
+            ResponseEntity<PostContainer> rtnEntity = this.httpGet(url, PostContainer.class);
+            ok = rtnEntity != null && Singleton.isSucc(rtnEntity.getBody().getSuccess());
         } catch (Exception e) {
            Log.e(Singleton.DAIFAN_TAG, "error when post comment", e);
         }

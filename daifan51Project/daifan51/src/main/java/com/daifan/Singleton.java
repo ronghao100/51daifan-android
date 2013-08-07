@@ -18,6 +18,7 @@ public class Singleton {
 
     public static final String DAIFAN_TAG = "51daifan";
     public static final String REST_API = "http://51daifan.sinaapp.com/api";
+    public static final int INT_SUCESS_API = 1;
 
     private ImageLoader imageLoader;
     /**
@@ -110,5 +111,9 @@ public class Singleton {
         List<ResolveInfo> list =
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
+    }
+
+    public static boolean isSucc(int code) {
+        return code == INT_SUCESS_API;
     }
 }
