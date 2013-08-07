@@ -8,12 +8,14 @@ import com.daifan.domain.Post;
 import com.daifan.domain.PostContainer;
 
 import com.daifan.domain.User;
+import com.fasterxml.jackson.core.JsonParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,20 +26,18 @@ import java.util.List;
 
 public class PostService {
 
-    public static final String REST_API = "http://51daifan.sinaapp.com/api";
-
     public ArrayList<Post> getPosts() {
-        final String url = REST_API + "/posts?type=0";
+        final String url = Singleton.REST_API + "/posts?type=0";
         return getInternalPosts(url);
     }
 
     public ArrayList<Post> getLatestPosts(int latestId) {
-        final String url = REST_API + "/posts?type=1&currentId=" + latestId;
+        final String url = Singleton.REST_API + "/posts?type=1&currentId=" + latestId;
         return getInternalPosts(url);
     }
 
     public ArrayList<Post> getOldestPosts(int oldestId) {
-        final String url = REST_API + "/posts?type=2&currentId=" + oldestId;
+        final String url = Singleton.REST_API + "/posts?type=2&currentId=" + oldestId;
         return getInternalPosts(url);
     }
 
@@ -64,7 +64,7 @@ public class PostService {
         String params = String.format("postId=%s&food_owner_id=%s&food_owner_name=%s&userId=%s&userName=%s"
                 ,post.getId(), post.getUserId(), post.getUserName(), u.getId(), u.getName());
 
-        String url = REST_API + "/book?" + params;
+        String url = Singleton.REST_API + "/book?" + params;
 
         try {
             ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
@@ -80,7 +80,7 @@ public class PostService {
 
         String params = String.format("postId=%s&userId=%s", post.getId(), u.getId());
 
-        String url = REST_API + "/undo-book?" + params;
+        String url = Singleton.REST_API + "/undo-book?" + params;
 
         try {
             ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
@@ -96,7 +96,7 @@ public class PostService {
                 , countStr, eatDateStr, nameStr, descStr, currUid));
 
         String params = String.format("count=%s&eatDate=%s&name=%s&desc=%s&uid=%s", countStr, eatDateStr, nameStr, descStr, currUid);
-        String url = REST_API + "/post?" + params;
+        String url = Singleton.REST_API + "/post?" + params;
 
         ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
         return 1 == responseEntity.getBody().getSuccess();
@@ -116,12 +116,16 @@ public class PostService {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
 
-        ResponseEntity<T> rtn = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+        try {
+            ResponseEntity<T> rtn = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
                 responseType);
 
-        Log.d(Singleton.DAIFAN_TAG, "response:" + rtn);
-
-        return rtn;
+            Log.d(Singleton.DAIFAN_TAG, "response:" + rtn);
+            return rtn;
+        }catch (HttpMessageNotReadableException e){
+            Log.e(Singleton.DAIFAN_TAG, "Post service reading message exception", e);
+            return null;
+        }
     }
 
     public Comment postComment(Post post, int currUid, String comment) {
@@ -133,7 +137,7 @@ public class PostService {
         //TODO: replace uid with uid in session!
         String url = null;
         try {
-            url = new StringBuffer().append(REST_API).append("/comment?")
+            url = new StringBuffer().append(Singleton.REST_API).append("/comment?")
                     .append("userId=").append(currUid)
                     .append("&postId=").append(post.getId())
                     .append("&comment=").append(URLEncoder.encode(comment, "UTF-8"))

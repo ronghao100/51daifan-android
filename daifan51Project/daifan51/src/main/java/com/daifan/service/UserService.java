@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-        final String url = String.format("http://51daifan.sinaapp.com/api/login?email=%s&password=%s", email.trim(), password);
+        final String url = String.format(Singleton.REST_API + "/login?email=%s&password=%s", email.trim(), password);
         HttpHeaders requestHeaders = getHttpHeaders();
 
         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
@@ -73,7 +73,7 @@ public class UserService {
     }
 
     public User register(String name, String email, String password) {
-        final String url = String.format("http://51daifan.sinaapp.com/api/register?name=%s&email=%s&password=%s",
+        final String url = String.format(Singleton.REST_API + "/register?name=%s&email=%s&password=%s",
                 name.trim(), email.trim(), password);
         HttpHeaders requestHeaders = getHttpHeaders();
 
@@ -106,7 +106,7 @@ public class UserService {
         User user = userDao.getUser();
         String userId = user.getId();
 
-        final String url = String.format("http://51daifan.sinaapp.com/api/push_register?userId=%s&pushUserId=%s&pushChannelId=%s",
+        final String url = String.format(Singleton.REST_API + "/push_register?userId=%s&pushUserId=%s&pushChannelId=%s",
                 userId, pushUserId.trim(), pushChannelId.trim());
         HttpHeaders requestHeaders = getHttpHeaders();
 

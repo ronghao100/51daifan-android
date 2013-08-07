@@ -17,6 +17,7 @@ public class Singleton {
 
 
     public static final String DAIFAN_TAG = "51daifan";
+    public static final String REST_API = "http://51daifan.sinaapp.com/api";
 
     private ImageLoader imageLoader;
     /**
