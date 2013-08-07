@@ -11,14 +11,13 @@ import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.domain.User;
@@ -26,14 +25,14 @@ import com.daifan.service.PostService;
 import com.daifan.service.UserService;
 import com.daifan.service.Utils;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Activity which post new recipes.
  */
-public class PostNewActivity extends BaseActivity {
+public class PostNewActivity extends BaseActivity implements ThumbnailsFragment.ThumbnailsConfig {
+    public static final int ITEM_ID_POST = 1;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -91,135 +90,27 @@ public class PostNewActivity extends BaseActivity {
         postForm = findViewById(R.id.postnew_form);
         postStatusView = findViewById(R.id.postnew_status);
         postMsgView = (TextView) findViewById(R.id.postnew_status_message);
-
-        findViewById(R.id.postnew_post_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postNew();
-            }
-        });
-
-        findViewById(R.id.postnew_add_pic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(PostNewActivity.this, v);
-                popup.getMenuInflater().inflate(R.menu.pic, popup.getMenu());
-
-                final Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (!Singleton.isIntentAvailable(PostNewActivity.this, takePhotoIntent))
-                    popup.getMenu().removeItem(R.id.pic_menu_take_photo);
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(android.view.MenuItem item) {
-
-                        Intent intent = new Intent();
-                        switch (item.getItemId()) {
-                            case R.id.pic_menu_pick_photo:
-
-                                intent.setType("image/*");
-                                intent.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(intent, 2);
-
-                                return true;
-                            case R.id.pic_menu_take_photo:
-                                startActivityForResult(takePhotoIntent, 3);
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-                });
-
-                popup.show();
-            }
-        });
     }
 
-    View insertPhoto(String path){
-        Bitmap bm = decodeSampledBitmapFromUri(path, 220, 220);
-        return insertImage(bm);
-    }
-
-    private View insertImage(Bitmap bm) {
-
-        LinearLayout layout = (LinearLayout) findViewById(R.id.mygallery);
-
-        ImageView imageView = new ImageView(getApplicationContext());
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(220, 220));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageBitmap(bm);
-
-        layout.addView(imageView);
-        return layout;
-    }
-
-    public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
-        Bitmap bm = null;
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        bm = BitmapFactory.decodeFile(path, options);
-
-        return bm;
-    }
-
-    public int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = Math.round((float)height / (float)reqHeight);
-            } else {
-                inSampleSize = Math.round((float)width / (float)reqWidth);
-            }
-        }
-
-        return inSampleSize;
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.d(Singleton.DAIFAN_TAG, "the requestCode is " + requestCode + ", resultCode=" + resultCode);
-        if (requestCode == 3) {
-            Bundle extras = intent.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-            this.insertImage(bitmap);
-            return;
-        } else if (requestCode == 2) {
-            if (null == intent) {
-                Toast.makeText(PostNewActivity.this, "添加图片失败!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Uri uri = intent.getData();
-            String mPicPath = getRealPathFromURI(uri);
-            Log.d(Singleton.DAIFAN_TAG, "pic url == " + mPicPath);
-            this.insertPhoto(mPicPath);
-            return;
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem item = menu.add(0, ITEM_ID_POST, 0, R.string.action_postnew_post);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        super.onActivityResult(requestCode, resultCode, intent);
+        return true;
     }
 
-    // And to convert the image URI to the direct file system path of the image file
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == ITEM_ID_POST) {
+            postNew();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void postNew() {
@@ -302,6 +193,11 @@ public class PostNewActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         return;
+    }
+
+    @Override
+    public boolean supportNew() {
+        return true;
     }
 
     /**

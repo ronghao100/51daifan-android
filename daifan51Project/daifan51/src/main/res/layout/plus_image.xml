@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+    <ImageView
+            android:id="@+id/postnew_add_pic"
+            android:src="@drawable/pic_plus"
+            android:background="@null"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:maxWidth="@dimen/preview_pic_size"
+            android:maxHeight="@dimen/preview_pic_size"
+            android:minWidth="48.0dip"
+            android:minHeight="33.0dip"/>
+</merge>
