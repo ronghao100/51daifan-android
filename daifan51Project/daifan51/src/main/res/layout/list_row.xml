@@ -81,6 +81,19 @@
                 android:layout_marginRight="5.0dip"
                 android:layout_marginBottom="5.0dip">
 
+            <com.daifan.activity.ExpandGridView android:id="@+id/mygallery"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:columnWidth="85dp"
+                                                android:visibility="gone"
+                                                android:numColumns="auto_fit"
+                                                android:verticalSpacing="2dp"
+                                                android:horizontalSpacing="1dp"
+                                                android:stretchMode="columnWidth"
+                                                android:gravity="center">
+            </com.daifan.activity.ExpandGridView>
+
+            <!--
             <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/list_row_image"
                     android:background="@null"
@@ -91,7 +104,8 @@
                     android:maxWidth="@dimen/preview_pic_size"
                     android:maxHeight="@dimen/preview_pic_size"
                     android:minWidth="48.0dip"
-                    android:minHeight="33.0dip"/>
+                    android:minHeight="33.0dip"/>  -->
+
         </RelativeLayout>
 
         <LinearLayout

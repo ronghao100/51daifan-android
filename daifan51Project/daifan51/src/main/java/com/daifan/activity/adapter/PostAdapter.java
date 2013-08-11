@@ -2,7 +2,6 @@ package com.daifan.activity.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -22,12 +21,12 @@ import android.widget.Toast;
 import com.android.volley.toolbox.NetworkImageView;
 import com.daifan.R;
 import com.daifan.Singleton;
-import com.daifan.activity.ImagesActivity;
+import com.daifan.activity.BaseActivity;
+import com.daifan.activity.ExpandGridView;
 import com.daifan.domain.Comment;
 import com.daifan.domain.Post;
 import com.daifan.domain.User;
 import com.daifan.service.PostService;
-import com.daifan.util.AlertUtil;
 
 import java.util.ArrayList;
 
@@ -98,6 +97,19 @@ public class PostAdapter extends BaseAdapter {
             (vi.findViewById(R.id.post_address_pic)).setVisibility(View.GONE);
         }
 
+        ExpandGridView grid = (ExpandGridView) vi.findViewById(R.id.mygallery);
+        if (post.getImages().size()>0){
+            ThumbnailsLoader adapter = new ThumbnailsLoader(this.activity, null);
+            adapter.addImageUrls(post.getImages());
+            ((BaseActivity)activity).getDaifanApplication().getImageLoader();
+            grid.setAdapter(adapter);
+            grid.setExpanded(true);
+            grid.setVisibility(View.VISIBLE);
+        } else {
+            grid.setVisibility(View.GONE);
+        }
+
+        /*
         NetworkImageView imageV = (NetworkImageView) vi.findViewById(R.id.list_row_image);
         if (post.hasImage()) {
             imageV.setImageUrl(post.getImages().get(0), mImageLoader);
@@ -115,7 +127,7 @@ public class PostAdapter extends BaseAdapter {
                 login.putExtra("images", fullImages.toArray(new String[0]));
                 activity.startActivity(login);
             }
-        });
+        });  */
 
         TextView postTotalNum = (TextView) vi.findViewById(R.id.post_total_num);
         postTotalNum.setText(String.valueOf(post.getCount()));
