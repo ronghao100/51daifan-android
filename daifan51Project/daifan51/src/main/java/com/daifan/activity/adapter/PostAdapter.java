@@ -101,6 +101,7 @@ public class PostAdapter extends BaseAdapter {
         if (post.getImages().size()>0){
             ThumbnailsLoader adapter = new ThumbnailsLoader(this.activity, null);
             adapter.addImageUrls(post.getImages());
+            adapter.addFullImages(post.fullImages());
             ((BaseActivity)activity).getDaifanApplication().getImageLoader();
             grid.setAdapter(adapter);
             grid.setExpanded(true);

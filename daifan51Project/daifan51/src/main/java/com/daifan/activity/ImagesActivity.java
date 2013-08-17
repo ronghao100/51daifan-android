@@ -29,14 +29,19 @@ public class ImagesActivity extends BaseActivity {
 
         ImagePagerAdapter adapter = new ImagePagerAdapter(getDaifanApplication().getImageLoader());
         Intent in = getIntent();
+
+        int currItem = 0;
         if (in != null) {
             String[] images = in.getStringArrayExtra("images");
             if (images != null)
                 adapter.setImages(images);
+            currItem = in.getIntExtra("currItem", 0);
             Log.d(Singleton.DAIFAN_TAG, "images:" + Arrays.toString(images));
         }
 
         viewPager.setAdapter(adapter);
+        if (currItem > 0)
+            viewPager.setCurrentItem(currItem);
     }
 
     private class ImagePagerAdapter extends PagerAdapter {

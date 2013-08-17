@@ -1,6 +1,7 @@
 package com.daifan.activity.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,13 +15,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.BaseActivity;
-import com.daifan.service.Utils;
+import com.daifan.activity.ImagesActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,8 @@ public class ThumbnailsLoader extends BaseAdapter {
         return newImgCallback != null;
     }
 
+
+
     static public interface NewImageCallback {
         public void postNewImage(Bitmap previewBm);
         public View.OnClickListener newBtnClickListener();
@@ -46,6 +48,8 @@ public class ThumbnailsLoader extends BaseAdapter {
 
     private ArrayList<Bitmap> bitMaps = new ArrayList<Bitmap>();
     private ArrayList<String> imageUrls = new ArrayList<String>();
+    //All thumbnails has a correspond elements
+    private ArrayList<String> fullImages = new ArrayList<String>();
 
     public ThumbnailsLoader(Context context, NewImageCallback newImageCallback) {
         this.context = context;
@@ -174,7 +178,7 @@ public class ThumbnailsLoader extends BaseAdapter {
              }
 
              imageView.setImageBitmap(bitMaps.get(position));
-            imageView.setOnClickListener(new ThumbnailOnClickListener(position));
+            imageView.setOnClickListener(new ThumbnailOnClickListener(context, isSupportNew(), position, this.fullImages));
              return imageView;
         } else {
 
@@ -193,7 +197,7 @@ public class ThumbnailsLoader extends BaseAdapter {
 
             ImageLoader imgLoader = ((BaseActivity) context).getDaifanApplication().getImageLoader();
             niv.setImageUrl(this.imageUrls.get(position - this.bitMaps.size()), imgLoader);
-            niv.setOnClickListener(new ThumbnailOnClickListener(position));
+            niv.setOnClickListener(new ThumbnailOnClickListener(context, isSupportNew(), position, this.fullImages));
             return niv;
         }
     }
@@ -221,15 +225,35 @@ public class ThumbnailsLoader extends BaseAdapter {
     }
 
     private static class ThumbnailOnClickListener implements View.OnClickListener {
+        private final Context context;
         private final int position;
+        private final boolean supportNew;
+        private ArrayList<String> fullImages = new ArrayList<String>();
 
-        public ThumbnailOnClickListener(int position) {
+        public ThumbnailOnClickListener(Context context, boolean supportNew, int position, ArrayList<String> imgs) {
+            this.context = context;
             this.position = position;
+            this.supportNew = supportNew;
+            if (imgs != null)
+                this.fullImages = imgs;
         }
 
         @Override
         public void onClick(View v) {
             Log.d(Singleton.DAIFAN_TAG, "clicked on image:" + position);
+            if (supportNew) {
+
+            } else {
+                Intent login = new Intent(context.getApplicationContext(), ImagesActivity.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                login.putExtra("images", fullImages.toArray(new String[0]));
+                login.putExtra("currItem", this.position);
+                context.startActivity(login);
+            }
         }
+    }
+
+    public void addFullImages(ArrayList<String> fullImgs) {
+        this.fullImages.addAll(fullImgs);
     }
 }
