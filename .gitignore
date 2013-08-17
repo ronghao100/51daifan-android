@@ -6,3 +6,5 @@ build/
 *.iml
 .gradle
 *.orig
+daifan51Project/libraries/actionbarsherlock/gen/com/actionbarsherlock/R.java
+daifan51Project/libraries/actionbarsherlock/gen/com/actionbarsherlock/Manifest.java
