@@ -27,6 +27,11 @@ import java.util.List;
 
 public class ThumbnailsLoader extends BaseAdapter {
 
+    public static final int THUMBNAIL_W_DP = 100;
+    public static final int THUMBNAIL_H_DP = 100;
+    private final int thumbnailW;
+    private final int thumbnailH;
+
     private boolean isSupportNew() {
         return newImgCallback != null;
     }
@@ -45,6 +50,8 @@ public class ThumbnailsLoader extends BaseAdapter {
     public ThumbnailsLoader(Context context, NewImageCallback newImageCallback) {
         this.context = context;
         this.newImgCallback = newImageCallback;
+        this.thumbnailH = dpToPx(THUMBNAIL_H_DP, context);
+        this.thumbnailW = dpToPx(THUMBNAIL_W_DP, context);
     }
 
     public Object getItem(int position) {
@@ -76,7 +83,7 @@ public class ThumbnailsLoader extends BaseAdapter {
 
     public void addImage(Uri uri) {
         String mPicPath = getRealPathFromURI(uri);
-        Log.d(Singleton.DAIFAN_TAG, "pic url == " + mPicPath);
+        Log.d(Singleton.DAIFAN_TAG, "pic url = " + mPicPath);
         this.insertPhoto(mPicPath);
     }
 
@@ -85,7 +92,7 @@ public class ThumbnailsLoader extends BaseAdapter {
             Log.d(Singleton.DAIFAN_TAG, "insert photo failed for the path is null");
             return;
         }
-        Bitmap bm = decodeSampledBitmapFromUri(path, 220, 220);
+        Bitmap bm = decodeSampledBitmapFromUri(path, this.thumbnailW, this.thumbnailH);
         this.add(bm);
         this.newImgCallback.postNewImage(bm);
     }
@@ -115,13 +122,17 @@ public class ThumbnailsLoader extends BaseAdapter {
         final int width = options.outWidth;
         int inSampleSize = 1;
 
+        //make sure image size larger than Preview bounds
         if (height > reqHeight || width > reqWidth) {
             if (width > height) {
-                inSampleSize = Math.round((float) height / (float) reqHeight);
-            } else {
                 inSampleSize = Math.round((float) width / (float) reqWidth);
+            } else {
+                inSampleSize = Math.round((float) height / (float) reqHeight);
             }
         }
+
+        Log.d(Singleton.DAIFAN_TAG, "calculateInSampleSize: orgW=" + width + ", orgH=" + height
+                + ", newW=" + reqWidth + ", newH=" + reqHeight + ", inSampleSize=" + inSampleSize);
 
         return inSampleSize;
     }
@@ -187,22 +198,21 @@ public class ThumbnailsLoader extends BaseAdapter {
 
     private void decorImageView(ImageView imageView, Context mContext) {
         int padding = mContext.getResources().getDimensionPixelSize(R.dimen.padding_medium);
-        imageView.setPadding(padding, padding, padding, padding);
+        imageView.setPadding(0, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         //TODO: it should be better to assign by callers
-//        int preview_pic_size = R.dimen.preview_pic_size;
-        int preview_pic_size = dpToPx(80, mContext);
-        imageView.setMaxHeight(preview_pic_size);
-        imageView.setMaxHeight(preview_pic_size);
+        imageView.setMaxHeight(thumbnailH);
+        imageView.setMaxWidth(thumbnailW);
 
-        imageView.setMinimumHeight(dpToPx(80, mContext));
-        imageView.setMinimumWidth(dpToPx(80, mContext));
-        Log.d(Singleton.DAIFAN_TAG, "size:" + preview_pic_size);
+        imageView.setMinimumHeight(thumbnailH);
+        imageView.setMinimumWidth(thumbnailW);
+
+        Log.d(Singleton.DAIFAN_TAG, "set thunbnail w:"+ thumbnailW + ", h:" + thumbnailH);
     }
 
-    public int dpToPx(int dp, Context context) {
+    public static int dpToPx(int dp, Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
