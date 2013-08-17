@@ -154,7 +154,7 @@ public class ThumbnailsLoader extends BaseAdapter {
         return this.bitMaps.size() + this.imageUrls.size() + (isSupportNew() ? 1 : 0);
     }
 
-    public ImageView setImage(ImageView imageView, int position) {
+    public ImageView setImage(ImageView imageView, final int position) {
         if (isSupportNew() && (position == this.getCount() - 1)) {
 
             if (imageView == null) {
@@ -174,7 +174,8 @@ public class ThumbnailsLoader extends BaseAdapter {
              }
 
              imageView.setImageBitmap(bitMaps.get(position));
-            return imageView;
+            imageView.setOnClickListener(new ThumbnailOnClickListener(position));
+             return imageView;
         } else {
 
             NetworkImageView niv;
@@ -192,6 +193,7 @@ public class ThumbnailsLoader extends BaseAdapter {
 
             ImageLoader imgLoader = ((BaseActivity) context).getDaifanApplication().getImageLoader();
             niv.setImageUrl(this.imageUrls.get(position - this.bitMaps.size()), imgLoader);
+            niv.setOnClickListener(new ThumbnailOnClickListener(position));
             return niv;
         }
     }
@@ -216,5 +218,18 @@ public class ThumbnailsLoader extends BaseAdapter {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    private static class ThumbnailOnClickListener implements View.OnClickListener {
+        private final int position;
+
+        public ThumbnailOnClickListener(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(Singleton.DAIFAN_TAG, "clicked on image:" + position);
+        }
     }
 }
