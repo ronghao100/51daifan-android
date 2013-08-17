@@ -199,7 +199,7 @@ public class ThumbnailsLoader extends BaseAdapter {
     private void decorImageView(ImageView imageView, Context mContext) {
         int padding = mContext.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(0, padding, padding, padding);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         //TODO: it should be better to assign by callers
