@@ -15,6 +15,8 @@ import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.adapter.ThumbnailsLoader;
 
+import java.io.IOException;
+
 public class ThumbnailsFragment extends SherlockFragment {
 
     static public interface ThumbnailsConfig {
@@ -22,6 +24,10 @@ public class ThumbnailsFragment extends SherlockFragment {
     }
 
     private ThumbnailsLoader loader;
+
+    public ThumbnailsLoader getLoader(){
+        return  this.loader;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +128,13 @@ public class ThumbnailsFragment extends SherlockFragment {
                 return;
             }
             Uri uri = intent.getData();
-            this.loader.addImage(uri);
+            try {
+                this.loader.addNewImage(uri);
+            } catch (IOException e) {
+                Log.e(Singleton.DAIFAN_TAG, "add pic failed for exception:" + e.getMessage(), e);
+                Toast.makeText(this.getSherlockActivity(), "添加图片失败!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             return;
         }
 

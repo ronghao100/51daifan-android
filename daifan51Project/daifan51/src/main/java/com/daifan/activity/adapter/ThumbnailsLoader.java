@@ -21,7 +21,10 @@ import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.BaseActivity;
 import com.daifan.activity.ImagesActivity;
+import com.daifan.service.FileCache;
+import com.daifan.service.Utils;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,9 @@ public class ThumbnailsLoader extends BaseAdapter {
         return newImgCallback != null;
     }
 
+    public String[] getNewImages() {
+        return newImagePaths.toArray(new String[0]);
+    }
 
 
     static public interface NewImageCallback {
@@ -50,6 +56,7 @@ public class ThumbnailsLoader extends BaseAdapter {
     private ArrayList<String> imageUrls = new ArrayList<String>();
     //All thumbnails has a correspond elements
     private ArrayList<String> fullImages = new ArrayList<String>();
+    private ArrayList<String> newImagePaths = new ArrayList<String>();
 
     public ThumbnailsLoader(Context context, NewImageCallback newImageCallback) {
         this.context = context;
@@ -85,10 +92,47 @@ public class ThumbnailsLoader extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void addImage(Uri uri) {
-        String mPicPath = getRealPathFromURI(uri);
-        Log.d(Singleton.DAIFAN_TAG, "pic url = " + mPicPath);
-        this.insertPhoto(mPicPath);
+    public void addNewImage(Uri uri) throws IOException {
+        String path = getRealPathFromURI(uri);
+        Log.d(Singleton.DAIFAN_TAG, "pic url = " + path);
+        if (path != null) {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+
+            if (options.outWidth > 640
+                    || options.outHeight > 960) {
+                Log.d(Singleton.DAIFAN_TAG, "try rewrite the image for too big:" + path);
+                options.inSampleSize = calculateInSampleSize(options, 640, 960);
+
+                options.inJustDecodeBounds = false;
+                Bitmap bm = BitmapFactory.decodeFile(path, options);
+
+                Log.d(Singleton.DAIFAN_TAG, "new file size: widht=" + bm.getWidth()
+                        + ", heigh=" + bm.getHeight() + ", size:" + bm.getByteCount());
+
+                File cd = new FileCache(this.context).getCacheDir();
+                if (cd != null) {
+                    OutputStream os = null;
+                    try {
+                        File tmp = new File(cd, System.currentTimeMillis() + ".png");
+                        os = new FileOutputStream(tmp);
+                        if(bm.compress(Bitmap.CompressFormat.PNG, 100, os)){
+                            this.newImagePaths.add(tmp.getAbsolutePath());
+                            this.insertPhoto(path);
+                        } else {
+                            throw new IOException(("compress to tmp file failed:" + path));
+                        }
+                    } finally {
+                        if (os != null)
+                            os.close();
+                    }
+                }
+            } else {
+                this.newImagePaths.add(path);
+                this.insertPhoto(path);
+            }
+        }
     }
 
     void insertPhoto(String path) {
@@ -102,9 +146,7 @@ public class ThumbnailsLoader extends BaseAdapter {
     }
 
     public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
-        Bitmap bm = null;
-
-        // First decode with inJustDecodeBounds=true to check dimensions
+        Bitmap bm = null;        // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);

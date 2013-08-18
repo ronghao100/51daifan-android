@@ -1,14 +1,8 @@
 package com.daifan.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +12,7 @@ import android.widget.*;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.daifan.service.ImageUploader;
 import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.domain.User;
@@ -114,6 +109,17 @@ public class PostNewActivity extends BaseActivity implements ThumbnailsFragment.
     }
 
     public void postNew() {
+
+        ThumbnailsFragment f = (ThumbnailsFragment) this.getSupportFragmentManager()
+                .findFragmentById(R.id.thumbnails_grid);
+
+        if (f.getLoader() != null) {
+            for (String p : f.getLoader().getNewImages()) {
+                Log.d(Singleton.DAIFAN_TAG, "start uploading new image:" + p);
+                new ImageUploader().upload(p);
+            }
+        }
+
         if (runningPost != null) {
             return;
         }
