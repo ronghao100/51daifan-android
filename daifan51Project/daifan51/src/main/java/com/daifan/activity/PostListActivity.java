@@ -141,12 +141,16 @@ public class PostListActivity extends BaseActivity {
         protected ArrayList<Post> doInBackground(Void... params) {
             // Simulates a background job.
             ArrayList<Post> posts = new ArrayList<Post>();
+            int nextId = 0;
             if (refreshMode == PullToRefreshListView.REFRESHING_DOWN) {
-                Post lastPost = postList.get(postList.size() - 1);
-                posts = Singleton.getInstance().getPostService().getOldestPosts(lastPost.getId());
+
+                if (postList != null && !postList.isEmpty())
+                    nextId = postList.get(postList.size() - 1).getId();
+                posts = Singleton.getInstance().getPostService().getOldestPosts(nextId);
             } else if (refreshMode == PullToRefreshListView.REFRESHING_TOP) {
-                int firstPostId = postList!=null && !postList.isEmpty() ?  postList.get(0).getId():0;
-                posts = Singleton.getInstance().getPostService().getLatestPosts(firstPostId);
+                if (postList != null && !postList.isEmpty())
+                    nextId = postList.get(0).getId();
+                posts = Singleton.getInstance().getPostService().getLatestPosts(nextId);
             }
             return posts;
         }
