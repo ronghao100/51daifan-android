@@ -1,5 +1,6 @@
 package com.daifan.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -8,11 +9,11 @@ import java.util.HashMap;
 /**
  * Created by ronghao on 13-7-7.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PostContainer extends ApiInvokeResult {
 
     @JsonProperty("posts")
     private ArrayList<Post> posts;
-
 
     @JsonProperty("bookedUidNames")
     private HashMap<Integer, String> bookedUidNames = new HashMap<Integer, String>(0);

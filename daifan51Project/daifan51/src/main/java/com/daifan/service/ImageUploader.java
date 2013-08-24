@@ -16,7 +16,10 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 
 public class ImageUploader {
-    public boolean upload(String filename) {
+
+    public static final String CON_START_FILEID = "FILEID:";
+
+    public String upload(String filename) {
 
         Log.d(Singleton.DAIFAN_TAG, "start writing filename:" + filename + " to server");
 
@@ -24,8 +27,7 @@ public class ImageUploader {
         HttpContext httpContext = new BasicHttpContext();
         HttpPost httpPost = new HttpPost("http://51daifan.sinaapp.com/recipes/add_image");
 
-        try
-        {
+        try {
             MultipartEntity multipartContent = new MultipartEntity();
             multipartContent.addPart("Filedata", new FileBody(new File(filename)));
             long totalSize = multipartContent.getContentLength();
@@ -34,18 +36,20 @@ public class ImageUploader {
             httpPost.setEntity(multipartContent);
             HttpResponse response = httpClient.execute(httpPost, httpContext);
             StatusLine statusLine = response.getStatusLine();
-            Log.d(Singleton.DAIFAN_TAG, "status line:" + statusLine);
 
-            boolean ok  = statusLine.getStatusCode() == 200;
-
-            Log.d(Singleton.DAIFAN_TAG, response.getEntity().getContentType().toString());
-            Log.d(Singleton.DAIFAN_TAG, EntityUtils.toString(response.getEntity()));
-            return ok;
-        }
-        catch (Exception e)
-        {
+            if (statusLine.getStatusCode() == 200) {
+                String con = EntityUtils.toString(response.getEntity());
+                if (con.startsWith(CON_START_FILEID)) {
+                    return con.substring(CON_START_FILEID.length());
+                } else {
+                    Log.e(Singleton.DAIFAN_TAG, "response incorrect:" + con);
+                }
+            } else {
+                Log.d(Singleton.DAIFAN_TAG, "uploading failed for status line:" + statusLine.toString());
+            }
+        } catch (Exception e) {
             Log.d(Singleton.DAIFAN_TAG, "Uploading filename" + filename + " failed", e);
         }
-        return false;
+        return null;
     }
 }

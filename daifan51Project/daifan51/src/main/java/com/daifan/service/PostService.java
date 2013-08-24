@@ -3,25 +3,27 @@ package com.daifan.service;
 import android.util.Log;
 
 import com.daifan.Singleton;
-import com.daifan.domain.Comment;
-import com.daifan.domain.Post;
-import com.daifan.domain.PostContainer;
+import com.daifan.activity.PostNewActivity;
+import com.daifan.domain.*;
 
-import com.daifan.domain.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PostService {
 
@@ -43,7 +45,7 @@ public class PostService {
     private ArrayList<Post> getInternalPosts(String url) {
 
         try {
-            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            ResponseEntity<PostContainer> responseEntity = http(url, PostContainer.class);
             if (responseEntity == null)
                 return new ArrayList<Post>();
 
@@ -66,7 +68,7 @@ public class PostService {
         String url = Singleton.REST_API + "/book?" + params;
 
         try {
-            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            ResponseEntity<PostContainer> responseEntity = http(url, PostContainer.class);
             return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
         } catch (Exception e) {
             Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
@@ -82,7 +84,7 @@ public class PostService {
         String url = Singleton.REST_API + "/undo-book?" + params;
 
         try {
-            ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
+            ResponseEntity<PostContainer> responseEntity = http(url, PostContainer.class);
             return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
         } catch (Exception e) {
             Log.e(Singleton.DAIFAN_TAG, "post failed:" + e.getMessage(), e);
@@ -90,17 +92,30 @@ public class PostService {
         }
     }
 
-    public boolean postNew(String countStr, String eatDateStr, String nameStr, String descStr, String currUid) {
+    public boolean postNew(String countStr, String eatDateStr, String nameStr, String descStr, String currUid, List<String> imgs) {
         Log.d(Singleton.DAIFAN_TAG, String.format("postNew count=%s, eatDate=%s, name=%s, desc=%s, uid=%s"
                 , countStr, eatDateStr, nameStr, descStr, currUid));
 
         String params = String.format("count=%s&eatDate=%s&name=%s&desc=%s&uid=%s", countStr, eatDateStr, nameStr, descStr, currUid);
         String url = Singleton.REST_API + "/post?" + params;
 
-        ResponseEntity<PostContainer> responseEntity = httpGet(url, PostContainer.class);
-        return responseEntity != null && Singleton.isSucc(responseEntity.getBody().getSuccess());
+        MultiValueMap<String, String> imgMap = new LinkedMultiValueMap<String, String>();;
+
+        if (imgs != null && imgs.size()>0) {
+            for(String img : imgs)
+                imgMap.add("img[]", img);
+        }
+
+        ResponseEntity<PostNew> responseEntity = http(url, PostNew.class, imgMap);
+
+        return responseEntity != null
+                && Singleton.isSucc(responseEntity.getBody().getSuccess())
+                && responseEntity.getBody().getNewPostId()>0;
     }
 
+    private <T> ResponseEntity<T> http(String url, Class<T> responseType) {
+        return this.http(url, responseType, null);
+    }
     /**
      *
      * @param url
@@ -108,23 +123,30 @@ public class PostService {
      * @param <T>
      * @return null if exception
      */
-    private <T> ResponseEntity<T> httpGet(String url, Class<T> responseType) {
+    private <T> ResponseEntity<T> http(String url, Class<T> responseType, MultiValueMap posts) {
 
         Log.d(Singleton.DAIFAN_TAG, url);
 
         //TODO: url encoding for names
-        HttpHeaders requestHeaders = new HttpHeaders();
+        HttpHeaders reqHead = new HttpHeaders();
         List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-        requestHeaders.setAccept(acceptableMediaTypes);
+        reqHead.setAccept(acceptableMediaTypes);
 
-        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter2());
 
         try {
-            ResponseEntity<T> rtn = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
-                responseType);
+            ResponseEntity<T> rtn;
+            if (posts != null)  {
+                reqHead.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+                rtn = restTemplate.postForEntity(url, new HttpEntity<Object>(posts, reqHead), responseType);
+            } else {
+                HttpEntity<?> requestEntity = new HttpEntity<Object>(reqHead);
+                rtn = restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseType);
+            }
 
             Log.d(Singleton.DAIFAN_TAG, "response:" + rtn);
             return rtn;
@@ -154,7 +176,7 @@ public class PostService {
 
         boolean ok = false;
         try {
-            ResponseEntity<PostContainer> rtnEntity = this.httpGet(url, PostContainer.class);
+            ResponseEntity<PostContainer> rtnEntity = this.http(url, PostContainer.class);
             ok = rtnEntity != null && Singleton.isSucc(rtnEntity.getBody().getSuccess());
         } catch (Exception e) {
            Log.e(Singleton.DAIFAN_TAG, "error when post comment", e);

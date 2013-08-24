@@ -21,7 +21,9 @@ import com.daifan.service.UserService;
 import com.daifan.service.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Activity which post new recipes.
@@ -113,15 +115,13 @@ public class PostNewActivity extends BaseActivity implements ThumbnailsFragment.
         ThumbnailsFragment f = (ThumbnailsFragment) this.getSupportFragmentManager()
                 .findFragmentById(R.id.thumbnails_grid);
 
-        if (f.getLoader() != null) {
-            for (String p : f.getLoader().getNewImages()) {
-                Log.d(Singleton.DAIFAN_TAG, "start uploading new image:" + p);
-                new ImageUploader().upload(p);
-            }
-        }
-
         if (runningPost != null) {
             return;
+        }
+
+        String[] imgs = {};
+        if (f.getLoader() != null) {
+            imgs = f.getLoader().getNewImages();
         }
 
         // Reset errors.
@@ -174,7 +174,7 @@ public class PostNewActivity extends BaseActivity implements ThumbnailsFragment.
         } else {
             postMsgView.setText(R.string.postnew_progress_text);
             Utils.swithLoadingView(true, postStatusView, postForm, switchAnimTime());
-            runningPost = new PostNew();
+            runningPost = new PostNew(imgs);
             runningPost.execute((Void) null);
         }
     }
@@ -211,11 +211,26 @@ public class PostNewActivity extends BaseActivity implements ThumbnailsFragment.
      * the user.
      */
     public class PostNew extends AsyncTask<Void, Void, Boolean> {
+        private String[] imgs;
+        public PostNew(String[] imgs) {
+            this.imgs = imgs;
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                return postService.postNew(countStr, eatDateStr, nameStr, descStr, currUid);
+                List<String> thumbnails = new ArrayList<String>(this.imgs.length);
+                for (String p : this.imgs) {
+                    Log.d(Singleton.DAIFAN_TAG, "start uploading new image:" + p);
+                    String img = new ImageUploader().upload(p);
+                    if (img != null)
+                        thumbnails.add(img);
+                    else {
+                        Log.e(Singleton.DAIFAN_TAG, "thumbnails failed to upload " + p);
+                    }
+                    //TODO: give user a tips for uploading failed pictures.
+                }
+                return postService.postNew(countStr, eatDateStr, nameStr, descStr, currUid, thumbnails);
             }catch (Exception e){
                 Log.e(Singleton.DAIFAN_TAG, "Exception when postNew " + e.getMessage(), e);
                 return false;
