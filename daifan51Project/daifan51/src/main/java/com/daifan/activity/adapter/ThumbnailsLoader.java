@@ -94,7 +94,7 @@ public class ThumbnailsLoader extends BaseAdapter {
 
     public void addNewImage(Uri uri) throws IOException {
         String path = getRealPathFromURI(uri);
-        Log.d(Singleton.DAIFAN_TAG, "pic url = " + path);
+        Log.d(Singleton.DAIFAN_TAG, "pic url = " + path + " from uri:" + uri);
         if (path != null) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -111,22 +111,19 @@ public class ThumbnailsLoader extends BaseAdapter {
                 Log.d(Singleton.DAIFAN_TAG, "new file size: widht=" + bm.getWidth()
                         + ", heigh=" + bm.getHeight() + ", size:" + bm.getByteCount());
 
-                File cd = new FileCache(this.context).getCacheDir();
-                if (cd != null) {
-                    OutputStream os = null;
-                    try {
-                        File tmp = new File(cd, System.currentTimeMillis() + ".png");
-                        os = new FileOutputStream(tmp);
-                        if(bm.compress(Bitmap.CompressFormat.PNG, 100, os)){
-                            this.newImagePaths.add(tmp.getAbsolutePath());
-                            this.insertPhoto(path);
-                        } else {
-                            throw new IOException(("compress to tmp file failed:" + path));
-                        }
-                    } finally {
-                        if (os != null)
-                            os.close();
+                OutputStream os = null;
+                try {
+                    File tmp = Singleton.getFileCache().createTmpImg();
+                    os = new FileOutputStream(tmp);
+                    if(bm.compress(Bitmap.CompressFormat.PNG, 100, os)){
+                        this.newImagePaths.add(tmp.getAbsolutePath());
+                        this.insertPhoto(path);
+                    } else {
+                        throw new IOException(("compress to tmp file failed:" + path));
                     }
+                } finally {
+                    if (os != null)
+                        os.close();
                 }
             } else {
                 this.newImagePaths.add(path);
@@ -192,8 +189,10 @@ public class ThumbnailsLoader extends BaseAdapter {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
-        } else
-            return null;
+        } else if ("file".equals(contentUri.getScheme())) {
+            return contentUri.getSchemeSpecificPart();
+        }
+        return null;
     }
 
     public int getCount() {

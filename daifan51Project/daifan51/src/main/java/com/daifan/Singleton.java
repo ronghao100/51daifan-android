@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import com.daifan.domain.User;
+import com.daifan.service.FileCache;
 import com.daifan.service.ImageLoader;
 import com.daifan.service.PostService;
 import com.daifan.service.StatusService;
@@ -12,6 +13,7 @@ import com.daifan.service.StatusService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Singleton {
 
@@ -115,5 +117,15 @@ public class Singleton {
 
     public static boolean isSucc(int code) {
         return code == INT_SUCESS_API;
+    }
+
+
+    //SHould set at startup
+    private static AtomicReference<FileCache> fileCache = new AtomicReference<FileCache>();
+    public static FileCache getFileCache() {
+        if (fileCache.get() == null) {
+            fileCache.compareAndSet(null, new FileCache(DaifanApplication.getDaifanApplication()));
+        }
+        return fileCache.get();
     }
 }

@@ -33,7 +33,7 @@ public class ImageLoader {
     ExecutorService executorService;
 
     public ImageLoader(Context context){
-        fileCache=new FileCache(context);
+        fileCache= Singleton.getFileCache();
         executorService=Executors.newFixedThreadPool(5);
     }
 

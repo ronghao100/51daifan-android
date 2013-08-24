@@ -1,5 +1,6 @@
 package com.daifan.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.adapter.ThumbnailsLoader;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ThumbnailsFragment extends SherlockFragment {
@@ -80,6 +82,7 @@ public class ThumbnailsFragment extends SherlockFragment {
     }
 
 
+    private Uri currentTakingDest = null;
     private void clickAddPic(View clickedV) {
         PopupMenu popup = new PopupMenu(this.getSherlockActivity(), clickedV);
         popup.getMenuInflater().inflate(R.menu.pic, popup.getMenu());
@@ -101,6 +104,16 @@ public class ThumbnailsFragment extends SherlockFragment {
 
                         return true;
                     case R.id.pic_menu_take_photo:
+                        File tmpImg;
+                        try {
+                            tmpImg = Singleton.getFileCache().createTmpImg();
+                        } catch (IOException e) {
+                            Log.e(Singleton.DAIFAN_TAG, "cannot creat tmp file in file Cache");
+                            Toast.makeText(getSherlockActivity(), "无法创建用于保存图像的临时文件!", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                        currentTakingDest = Uri.fromFile(tmpImg);
+                        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentTakingDest);
                         startActivityForResult(takePhotoIntent, 3);
                         return true;
                     default:
@@ -114,30 +127,40 @@ public class ThumbnailsFragment extends SherlockFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         Log.d(Singleton.DAIFAN_TAG, "the requestCode is " + requestCode + ", resultCode=" + resultCode);
-        if (requestCode == 3) {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                Bitmap bitmap = (Bitmap) extras.get("data");
-                this.loader.add(bitmap);
-            }
-            return;
-        } else if (requestCode == 2) {
-            if (null == intent) {
-                Toast.makeText(this.getSherlockActivity(), "添加图片失败!", Toast.LENGTH_SHORT).show();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 3) {
+                this.galleryAddPic(this.currentTakingDest);
+                addToNewImage(this.currentTakingDest);
+                return;
+            } else if (requestCode == 2) {
+                if (null == intent) {
+                    Toast.makeText(this.getSherlockActivity(), "添加图片失败!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Uri uri = intent.getData();
+                addToNewImage(uri);
                 return;
             }
-            Uri uri = intent.getData();
-            try {
-                this.loader.addNewImage(uri);
-            } catch (IOException e) {
-                Log.e(Singleton.DAIFAN_TAG, "add pic failed for exception:" + e.getMessage(), e);
-                Toast.makeText(this.getSherlockActivity(), "添加图片失败!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            return;
         }
 
-        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    private void addToNewImage(Uri uri) {
+        try {
+            this.loader.addNewImage(uri);
+        } catch (IOException e) {
+            Log.e(Singleton.DAIFAN_TAG, "add pic failed for exception:" + e.getMessage(), e);
+            Toast.makeText(this.getSherlockActivity(), "添加图片失败!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        return;
+    }
+
+    private void galleryAddPic(Uri contentUri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(contentUri);
+        this.getSherlockActivity().sendBroadcast(mediaScanIntent);
     }
 }

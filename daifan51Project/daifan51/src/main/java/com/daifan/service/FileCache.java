@@ -3,10 +3,15 @@ package com.daifan.service;
 import android.content.Context;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FileCache {
 
     private File cacheDir;
+    private File imgDir;
 
     public FileCache(Context context) {
         //Find the dir to save cached images
@@ -16,6 +21,10 @@ public class FileCache {
             cacheDir = context.getCacheDir();
         if (!cacheDir.exists())
             cacheDir.mkdirs();
+
+        imgDir = new File(cacheDir, "images");
+        if (!imgDir.exists())
+            imgDir.mkdirs();
     }
 
     public File getCacheDir(){
@@ -29,7 +38,18 @@ public class FileCache {
         //String filename = URLEncoder.encode(url);
         File f = new File(cacheDir, filename);
         return f;
+    }
 
+    public File createTmpImg() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "jpg-" + timeStamp + "_";
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpeg",
+                this.imgDir
+        );
+        return image;
     }
 
     public void clear() {
