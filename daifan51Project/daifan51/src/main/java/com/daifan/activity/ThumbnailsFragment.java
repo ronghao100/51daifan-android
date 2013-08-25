@@ -7,10 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
+import android.view.*;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.daifan.R;
 import com.daifan.Singleton;
@@ -43,8 +44,11 @@ public class ThumbnailsFragment extends SherlockFragment {
         grid.setExpanded(true);
         this.loader = new ThumbnailsLoader(this.getSherlockActivity(), new ThumbnailsLoader.NewImageCallback() {
             @Override
-            public void postNewImage(Bitmap previewBm) {
+            public void postNewImage(Bitmap previewBm, ImageView imageView) {
                 Log.d(Singleton.DAIFAN_TAG, "accepted callback for postNewImage");
+                if (imageView != null) {
+                    registerForContextMenu(imageView);
+                }
             }
 
             @Override
@@ -52,9 +56,15 @@ public class ThumbnailsFragment extends SherlockFragment {
                 return new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ThumbnailsFragment.this.clickAddPic(v);
+                        //ThumbnailsFragment.this.clickAddPic(v);
                     }
                 };
+            }
+
+            @Override
+            public void postNotANewImage(ImageView imageView) {
+                if (imageView != null)
+                    unregisterForContextMenu(imageView);
             }
         });
         grid.setAdapter(this.loader);
@@ -81,48 +91,71 @@ public class ThumbnailsFragment extends SherlockFragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = this.getSherlockActivity().getMenuInflater();
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (!Singleton.isIntentAvailable(this.getSherlockActivity(), takePhotoIntent))
+            menu.removeItem(R.id.pic_menu_take_photo);
+
+        inflater.inflate(R.menu.pic, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        return this.onNewImgMenu(item);
+    }
 
     private Uri currentTakingDest = null;
     private void clickAddPic(View clickedV) {
         PopupMenu popup = new PopupMenu(this.getSherlockActivity(), clickedV);
         popup.getMenuInflater().inflate(R.menu.pic, popup.getMenu());
 
-        final Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (!Singleton.isIntentAvailable(this.getSherlockActivity(), takePhotoIntent))
             popup.getMenu().removeItem(R.id.pic_menu_take_photo);
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(android.view.MenuItem item) {
-
-                Intent intent = new Intent();
-                switch (item.getItemId()) {
-                    case R.id.pic_menu_pick_photo:
-
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(intent, 2);
-
-                        return true;
-                    case R.id.pic_menu_take_photo:
-                        File tmpImg;
-                        try {
-                            tmpImg = Singleton.getFileCache().createTmpImg();
-                        } catch (IOException e) {
-                            Log.e(Singleton.DAIFAN_TAG, "cannot creat tmp file in file Cache");
-                            Toast.makeText(getSherlockActivity(), "无法创建用于保存图像的临时文件!", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                        currentTakingDest = Uri.fromFile(tmpImg);
-                        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentTakingDest);
-                        startActivityForResult(takePhotoIntent, 3);
-                        return true;
-                    default:
-                        return false;
-                }
+                return onNewImgMenu(item);
             }
         });
 
         popup.show();
+    }
+
+    private boolean onNewImgMenu(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.pic_menu_pick_photo:
+
+                intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 2);
+
+                return true;
+            case R.id.pic_menu_take_photo:
+                File tmpImg;
+                try {
+                    tmpImg = Singleton.getFileCache().createTmpImg();
+                } catch (IOException e) {
+                    Log.e(Singleton.DAIFAN_TAG, "cannot creat tmp file in file Cache");
+                    Toast.makeText(getSherlockActivity(), "无法创建用于保存图像的临时文件!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                currentTakingDest = Uri.fromFile(tmpImg);
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, currentTakingDest);
+                startActivityForResult(intent, 3);
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

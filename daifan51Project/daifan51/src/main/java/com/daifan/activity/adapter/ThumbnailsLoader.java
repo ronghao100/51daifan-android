@@ -21,8 +21,6 @@ import com.daifan.R;
 import com.daifan.Singleton;
 import com.daifan.activity.BaseActivity;
 import com.daifan.activity.ImagesActivity;
-import com.daifan.service.FileCache;
-import com.daifan.service.Utils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -45,8 +43,9 @@ public class ThumbnailsLoader extends BaseAdapter {
 
 
     static public interface NewImageCallback {
-        public void postNewImage(Bitmap previewBm);
+        public void postNewImage(Bitmap previewBm, ImageView imageView);
         public View.OnClickListener newBtnClickListener();
+        void postNotANewImage(ImageView imageView);
     }
 
     private Context context;
@@ -140,7 +139,6 @@ public class ThumbnailsLoader extends BaseAdapter {
         }
         Bitmap bm = decodeSampledBitmapFromUri(path, this.thumbnailW, this.thumbnailH);
         this.add(bm);
-        this.newImgCallback.postNewImage(bm);
     }
 
     public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
@@ -211,7 +209,7 @@ public class ThumbnailsLoader extends BaseAdapter {
             imageView.setImageResource(R.drawable.pic_plus);
             final ImageView iv = imageView;
             imageView.setOnClickListener(newImgCallback.newBtnClickListener());
-
+            newImgCallback.postNewImage(null, imageView);
             return imageView;
         } else if (position < this.bitMaps.size()) {
              if (imageView == null) {
@@ -219,9 +217,11 @@ public class ThumbnailsLoader extends BaseAdapter {
                  decorImageView(imageView, context);
              }
 
-             imageView.setImageBitmap(bitMaps.get(position));
+            imageView.setImageBitmap(bitMaps.get(position));
             imageView.setOnClickListener(new ThumbnailOnClickListener(context, isSupportNew(), position, this.fullImages));
-             return imageView;
+            if (newImgCallback != null)
+                newImgCallback.postNotANewImage(imageView);
+            return imageView;
         } else {
 
             NetworkImageView niv;
@@ -240,6 +240,8 @@ public class ThumbnailsLoader extends BaseAdapter {
             ImageLoader imgLoader = ((BaseActivity) context).getDaifanApplication().getImageLoader();
             niv.setImageUrl(this.imageUrls.get(position - this.bitMaps.size()), imgLoader);
             niv.setOnClickListener(new ThumbnailOnClickListener(context, isSupportNew(), position, this.fullImages));
+            if (newImgCallback != null)
+                newImgCallback.postNotANewImage(niv);
             return niv;
         }
     }
