@@ -105,19 +105,20 @@ public class ThumbnailsLoader extends BaseAdapter {
                 Log.d(Singleton.DAIFAN_TAG, "try rewrite the image for too big:" + path);
                 options.inSampleSize = calculateInSampleSize(options, 640, 960);
 
+
                 options.inJustDecodeBounds = false;
                 Bitmap bm = BitmapFactory.decodeFile(path, options);
-
-                Log.d(Singleton.DAIFAN_TAG, "new file size: widht=" + bm.getWidth()
+                Log.d(Singleton.DAIFAN_TAG, "image after scaled down: width=" + bm.getWidth()
                         + ", heigh=" + bm.getHeight() + ", size:" + bm.getByteCount());
 
                 OutputStream os = null;
                 try {
                     File tmp = Singleton.getFileCache().createTmpImg();
                     os = new FileOutputStream(tmp);
-                    if(bm.compress(Bitmap.CompressFormat.PNG, 100, os)){
+                    if(bm.compress(Bitmap.CompressFormat.JPEG, 100, os)){
                         this.newImagePaths.add(tmp.getAbsolutePath());
                         this.insertPhoto(path);
+                        Log.d(Singleton.DAIFAN_TAG, "size after compress:" + tmp.length() +", loc=" + tmp.getAbsolutePath());
                     } else {
                         throw new IOException(("compress to tmp file failed:" + path));
                     }

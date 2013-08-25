@@ -46,7 +46,7 @@ public class FileCache {
         String imageFileName = "jpg-" + timeStamp + "_";
         File image = File.createTempFile(
                 imageFileName,
-                ".jpeg",
+                ".jpg",
                 this.imgDir
         );
         return image;
