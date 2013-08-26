@@ -1,10 +1,12 @@
 package com.daifan.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ronghao on 13-7-5.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     @JsonProperty("id")
     private String id;

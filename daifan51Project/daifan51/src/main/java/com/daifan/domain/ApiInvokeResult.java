@@ -1,10 +1,12 @@
 package com.daifan.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by 浩 on 13-7-14.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiInvokeResult {
 
     @JsonProperty("success")

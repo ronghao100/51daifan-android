@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-        final String url = String.format(Singleton.REST_API + "/login?email=%s&password=%s", email.trim(), password);
+        final String url = String.format(Singleton.REST_API + "/login?email=%s&password=%s&ver=1", email.trim(), password);
         HttpHeaders requestHeaders = getHttpHeaders();
 
         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
