@@ -244,11 +244,11 @@ public class PostAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Log.d(Singleton.DAIFAN_TAG, "accepted commentBtn onclick event");
 
-                if (!post.booked(Singleton.getInstance().getCurrUid())) {
+                //if (!post.booked(Singleton.getInstance().getCurrUid())) {
 //                    AlertUtil.showAlert(activity, R.string.comment_block_title, R.string.comment_block_error);
-                    Toast.makeText(activity, R.string.comment_block_error, Toast.LENGTH_LONG).show();
-                    return;
-                }
+                   // Toast.makeText(activity, R.string.comment_block_error, Toast.LENGTH_LONG).show();
+                    //return;
+                //}
 
                 commentComp.showForPost(post, PostAdapter.this);
             }
