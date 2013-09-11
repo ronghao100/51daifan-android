@@ -283,20 +283,23 @@ public class Post {
     }
 
     public Comment addComment(int uid, String comment) {
-        Comment comm = null;
-        if (comments != null)
-            for (Comment c : this.comments)
-                if (c.getUid() == uid) {
-                    comm = c;
-                    break;
-                }
-
-        if (comm == null) {
-            comm = new Comment(uid, comment);
-            this.comments.add(comm);
-        } else
-            comm.setComment(comment);
-
+//        Comment comm = null;
+//        if (comments != null)
+//            for (Comment c : this.comments)
+//                if (c.getUid() == uid) {
+//                    comm = c;
+//                    break;
+//                }
+//
+//        if (comm == null) {
+//            comm = new Comment(uid, comment);
+//            this.comments.add(comm);
+//        } else
+//            comm.setComment(comment);
+//
+//        return comm;
+        Comment comm = new Comment(uid, comment);
+        this.comments.add(comm);
         return comm;
     }
 
@@ -323,6 +326,7 @@ public class Post {
         return fullImages;
     }
 
+    /*
     public String myComment(String currUid) {
 
         if (currUid != null) {
@@ -340,7 +344,9 @@ public class Post {
 
         return "";
     }
+    */
 
+    /**
     public boolean removeComment(String currUid) {
         if (currUid != null) {
             int uid;
@@ -361,4 +367,5 @@ public class Post {
 
         return false;
     }
+     */
 }

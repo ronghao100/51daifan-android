@@ -224,7 +224,7 @@ public class PostAdapter extends BaseAdapter {
                         Log.i(Singleton.DAIFAN_TAG, "onPostExecute of book:" + result);
                         doing = false;
                         if (result) {
-                            post.removeComment(currU.getId());
+//                            post.removeComment(currU.getId());
                             PostAdapter.this.notifyDataSetChanged();
                         }
                     }
